@@ -1,8 +1,8 @@
 ![tkai image](images/tkia.png)
 
-# Tanzu Know It All 
+---
 
-Disclaimer: This is my repo of links, examples and best practices that I got or created about VMware Tanzu portfollio. It's personnal there are no hard commitments from VMware. Use as is and without warranty of any kind.
+***Disclaimer:*** This is my repo of links, examples and best practices that I got or created about VMware Tanzu portfollio. It's personnal there are no hard commitments from VMware. Use as is and without warranty of any kind.
 
 Brice  
   
