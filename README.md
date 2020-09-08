@@ -1,4 +1,4 @@
-![tkai image](images/tanzu.png)
+![tkai image](images/tkia.png)
 
 # Tanzu Know It All 
 
