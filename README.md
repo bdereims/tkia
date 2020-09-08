@@ -11,7 +11,7 @@ Brice
 
 ## Training and 101
 - [Kube Academy](https://kube.academy/) is a bunch of good lessons about k8s
-- [Meetup with J. Petazzon about Docker and Kubernetes](https://vmware-2019-11.container.training/#1) and check out (Jérôme's repo)(https://github.com/jpetazzo/container.training)  
+- [Meetup with J. Petazzoni about Docker and Kubernetes](https://vmware-2019-11.container.training/#1) and check out (Jérôme's repo)(https://github.com/jpetazzo/container.training)  
 
 ## BLOGs / VLOGs
 - [TKG in multitenant setup](https://tanzu.vmware.com/content/practitioners/a-closer-look-at-vmware-tanzu-kubernetes-grid-multitenant-setup)
@@ -46,3 +46,14 @@ HOL are available [here](https://labs.hol.vmware.com)
 
 ## Ecosystem
 - [Metanext](https://www.metanext.com/) one of our partner on Tanzu
+
+## VMworld 2020 Sessions
+[Register and Schedule](https://www.vmworld.com/en/index.html) your VMworld sessions, it's free of charge.
+- Kubernetes Operators for VMware Tanzu Kubernetes Grid - KUB1248
+- Connect and Secure Your Applications Through Tanzu Service Mesh - MAP2081
+- Consuming Trusted Content from Tanzu Application Catalog - MAP2552
+- How to Get Startd with VMware Container Networking with Antrea - VCNC1553
+- The Datacenter of the Future - HCP3004
+- vCenter Server 7 Deconstructed - HCP2328
+
+
