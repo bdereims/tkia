@@ -13,6 +13,13 @@ Brice
 - [Kube Academy](https://kube.academy/) is a bunch of good lessons about k8s
 - [Meetup with J. Petazzoni about Docker and Kubernetes](https://vmware-2019-11.container.training/#1) and check out (Jérôme's repo)(https://github.com/jpetazzo/container.training)  
 
+## VMware & Kubernetes 
+- [CNCF's Landscape](https://landscape.cncf.io/)
+- [Countour Ingress Controler](https://projectcontour.io/)
+- [Harbor Registry](https://goharbor.io/)
+- [Tanzu Certtified K8S distro](https://www.cncf.io/certification/software-conformance/)
+- [Cluster API](https://github.com/kubernetes-sigs/cluster-api)
+
 ## BLOGs / VLOGs
 - [TKG in multitenant setup](https://tanzu.vmware.com/content/practitioners/a-closer-look-at-vmware-tanzu-kubernetes-grid-multitenant-setup)
 - [vSphere with Kubernetes demo](https://www.youtube.com/watch?v=GCW4GtdCHLc)
@@ -45,7 +52,7 @@ HOL are available [here](https://labs.hol.vmware.com)
 
 
 ## Ecosystem
-- [Metanext](https://www.metanext.com/) one of our partner on Tanzu
+- [Metanext](https://www.metanext.com/) one of our partners on Tanzu
 
 ## VMworld 2020 Sessions
 [Register and Schedule](https://www.vmworld.com/en/index.html) your VMworld sessions, it's free of charge.
