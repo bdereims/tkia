@@ -17,8 +17,10 @@ Brice
 - [CNCF's Landscape](https://landscape.cncf.io/)
 - [Countour Ingress Controler](https://projectcontour.io/)
 - [Harbor Registry](https://goharbor.io/)
-- [Tanzu Certtified K8S distro](https://www.cncf.io/certification/software-conformance/)
+- [Tanzu Certified K8S distro](https://www.cncf.io/certification/software-conformance/)
 - [Cluster API](https://github.com/kubernetes-sigs/cluster-api)
+- [Backup/Restore with Velero](https://velero.io/)
+- [Cluster Conformance with Sonobuoy](https://sonobuoy.io/)
 
 ## BLOGs / VLOGs
 - [TKG in multitenant setup](https://tanzu.vmware.com/content/practitioners/a-closer-look-at-vmware-tanzu-kubernetes-grid-multitenant-setup)
