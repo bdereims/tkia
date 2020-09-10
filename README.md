@@ -64,5 +64,9 @@ HOL are available [here](https://labs.hol.vmware.com)
 - How to Get Startd with VMware Container Networking with Antrea - VCNC1553
 - The Datacenter of the Future - HCP3004
 - vCenter Server 7 Deconstructed - HCP2328
+- Tanzu Kubernetes Grid Networking Concepts - KUB2334
+- Kubernetes Operators for VMware Tanzu Kubernetes Grid - KUB1248
+- vSphere with Tanzu Deep Dive - KUB2469
+- GitOps and Kubernetes – A Guide for the VI Admin - KUB2306
 
 
