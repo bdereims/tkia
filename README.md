@@ -51,6 +51,7 @@ HOL are available [here](https://labs.hol.vmware.com)
 - looking at kube GUI? check out [octant project](https://github.com/vmware-tanzu/octant)
 - [antrea](https://github.com/vmware-tanzu/antrea) is the new [CNI](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) plugin for kubernetes
 - [VMs2PODs](https://github.com/bdereims/pks-prep/blob/master/k8s/VMs2PODs/VMs2Pods.pdf) explaining how to move app to something like micro services and leveraging k8s features (all assets)
+- Volume expansion has been always an issue, [this is a how-to with vSphere CSI](https://github.com/kubernetes-sigs/vsphere-csi-driver/blob/master/docs/book/features/volume_expansion.md)
 
 
 ## Ecosystem
