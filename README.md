@@ -22,6 +22,16 @@ Brice
 - [Backup/Restore with Velero](https://velero.io/)
 - [Cluster Conformance with Sonobuoy](https://sonobuoy.io/)
 
+## Tanzu & Cloud Partners
+- [Tanzu on Microsft Azure](https://tanzu.vmware.com/partners/microsoft-azure)
+- [Tanzu on Google Cloud](https://tanzu.vmware.com/partners/google)
+- [Tanzu on Amazon Web Services](https://tanzu.vmware.com/partners/aws) 
+
+## Tanzu & Technology Partners
+- [Devops](https://tanzu.vmware.com/services-marketplace/devops-tooling)
+- [Identity and Security](https://tanzu.vmware.com/services-marketplace/identity-and-security)
+- [Monitoring, Metrics and Logging](https://tanzu.vmware.com/services-marketplace/monitoring-metrics-and-logging) 
+
 ## BLOGs / VLOGs
 - [TKG in multitenant setup](https://tanzu.vmware.com/content/practitioners/a-closer-look-at-vmware-tanzu-kubernetes-grid-multitenant-setup)
 - [vSphere with Kubernetes demo](https://www.youtube.com/watch?v=GCW4GtdCHLc)
@@ -53,7 +63,6 @@ HOL are available [here](https://labs.hol.vmware.com)
 - [antrea](https://github.com/vmware-tanzu/antrea) is the new [CNI](https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/) plugin for kubernetes
 - [VMs2PODs](https://github.com/bdereims/pks-prep/blob/master/k8s/VMs2PODs/VMs2Pods.pdf) explaining how to move app to something like micro services and leveraging k8s features (all assets)
 - Volume expansion has been always an issue, [this is a how-to with vSphere CSI](https://github.com/kubernetes-sigs/vsphere-csi-driver/blob/master/docs/book/features/volume_expansion.md)
-
 
 ## Ecosystem
 - [Metanext](https://www.metanext.com/) one of our partners on Tanzu
