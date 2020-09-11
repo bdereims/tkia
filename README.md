@@ -31,6 +31,7 @@ Brice
 - [vSAN File Services and Cloud Native Storage integration (Video)](https://cormachogan.com/2020/06/17/vsan-file-services-and-cloud-native-storage-integration/)
 - [vSphere CSI driver versions and capabilities](https://cormachogan.com/2020/05/07/vsphere-csi-driver-versions-and-capabilities/)
 - [vSphere 7.0, Cloud Native Storage, CSI and offline volume extend](https://cormachogan.com/2020/04/23/vsphere-7-0-cloud-native-storage-csi-and-offline-volume-extend/)
+- Become a [Modern Apps Ninja](https://www.modernapps.ninja/)
 
 ## Hands on Lab
 HOL are available [here](https://labs.hol.vmware.com)
