@@ -11,7 +11,9 @@ Brice
 
 ## Training and 101
 - [Kube Academy](https://kube.academy/) is a bunch of good lessons about k8s
-- [Meetup with J. Petazzoni about Docker and Kubernetes](https://vmware-2019-11.container.training/#1) and check out (Jérôme's repo)(https://github.com/jpetazzo/container.training)  
+- [Meetup with J. Petazzoni about Docker and Kubernetes](https://vmware-2019-11.container.training/#1) and check out (Jérôme's repo)(https://github.com/jpetazzo/container.training) 
+- [eduk8s-labs](https://github.com/eduk8s-labs)
+- [TKG for Dev - Labs](https://github.com/failk8s/tkg-dev-install)
 
 ## VMware & Kubernetes 
 - [CNCF's Landscape](https://landscape.cncf.io/)
