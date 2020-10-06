@@ -11,7 +11,9 @@ Brice
 
 ## Training and 101
 - [Kube Academy](https://kube.academy/) is a bunch of good lessons about k8s
-- [Meetup with J. Petazzoni about Docker and Kubernetes](https://vmware-2019-11.container.training/#1) and check out (Jérôme's repo)(https://github.com/jpetazzo/container.training)  
+- [Meetup with J. Petazzoni about Docker and Kubernetes](https://vmware-2019-11.container.training/#1) and check out (Jérôme's repo)(https://github.com/jpetazzo/container.training) 
+- [eduk8s-labs](https://github.com/eduk8s-labs)
+- [TKG for Dev - Labs](https://github.com/failk8s/tkg-dev-install)
 
 ## VMware & Kubernetes 
 - [CNCF's Landscape](https://landscape.cncf.io/)
@@ -43,6 +45,7 @@ Brice
 - [vSphere CSI driver versions and capabilities](https://cormachogan.com/2020/05/07/vsphere-csi-driver-versions-and-capabilities/)
 - [vSphere 7.0, Cloud Native Storage, CSI and offline volume extend](https://cormachogan.com/2020/04/23/vsphere-7-0-cloud-native-storage-csi-and-offline-volume-extend/)
 - Become a [Modern Apps Ninja](https://www.modernapps.ninja/)
+- [HA Proxy as type Load Balancer for vSphere with Tanzu](https://cormachogan.com/2020/09/28/enabling-vsphere-with-tanzu-using-ha-proxy/)
 
 ## Hands on Lab
 HOL are available [here](https://labs.hol.vmware.com)
