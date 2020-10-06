@@ -1,0 +1,14 @@
+Prerequsites:
+
+- Docker Engine: 
+	curl -fsSL https://get.docker.com -o get-docker.sh ; sudo sh get-docker.sh`
+
+- govc: 
+	curl -L https://github.com/vmware/govmomi/releases/download/v0.22.1/govc_linux_amd64.gz | gunzip > /usr/local/bin/govc ; chmod +x /usr/local/bin/govc
+
+TKG CLI:
+	tkg-linux-amd64-v1.0.0-rc.3-1+vmware.1.gz
+
+TKG OVA:
+	photon-3-capv-haproxy-v0.6.2+vmware.2.ova
+	photon-3-v1.17.3+vmware.1.ova

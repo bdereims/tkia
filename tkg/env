@@ -1,0 +1,8 @@
+export GOVC_URL=vcsa.cpod-vs67u3.az-rbx.cloud-garage.net
+export GOVC_INSECURE=1
+export GOVC_DATACENTER="cPod-VS67U3"
+export GOVC_DATASTORE=nfsDatastore
+export GOVC_NETWORK='VM Network'
+export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/Cluster/Resources/TKG"
+export BITS=/data/BITS/TKG
+export TKG_DIR=TKG

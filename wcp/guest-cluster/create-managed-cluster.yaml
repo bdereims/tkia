@@ -1,0 +1,25 @@
+apiVersion: gcm.vmware.com/v1alpha1
+kind: ManagedCluster
+metadata:
+  name: dev-cluster 
+  namespace: dev-cluster 
+spec:
+  topology:
+    controlPlane:
+      count: 1
+      class: guaranteed-xsmall # vmclass to be used for master(s)
+      storageClass: wcp-storage-policy 
+    workers:
+      count: 3
+      class: guaranteed-xsmall # vmclass to be used for workers(s)
+      storageClass: wcp-storage-policy 
+  distribution:
+    version: v1.15.5+vmware.1.66-guest.1.37
+  settings:
+    network:
+      cni:
+        name: calico
+      services:
+        cidrBlocks: ["10.43.0.0/16"]
+      pods:
+        cidrBlocks: ["10.44.0.0/16"]
