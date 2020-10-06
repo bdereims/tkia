@@ -1,0 +1,26 @@
+# cd ~
+ 
+# export REGISTRY="harbor-01a.corp.local"
+# export NAMESERVER="192.168.110.10"
+# export DOMAIN="corp.local"
+ 
+# cat > /tmp/harbor.sh <<EOF
+echo "nameserver $NAMESERVER" > /usr/lib/systemd/resolv.conf
+echo "domain $DOMAIN" >> /usr/lib/systemd/resolv.conf
+rm /etc/resolv.conf
+ln -s /usr/lib/systemd/resolv.conf /etc/resolv.conf
+mkdir -p /etc/containerd
+containerd config default > /etc/containerd/config.toml
+sed -i '95 i\        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."$REGISTRY"]' /etc/containerd/config.toml
+sed -i '96 i\          endpoint = ["https://$REGISTRY"]' /etc/containerd/config.toml
+sed -i '97 i\      [plugins."io.containerd.grpc.v1.cri".registry.configs]' /etc/containerd/config.toml
+sed -i '98 i\        [plugins."io.containerd.grpc.v1.cri".registry.configs."$REGISTRY"]' /etc/containerd/config.toml
+sed -i '99 i\          [plugins."io.containerd.grpc.v1.cri".registry.configs."$REGISTRY".tls]' /etc/containerd/config.toml
+sed -i '100 i\            insecure_skip_verify = true' /etc/containerd/config.toml
+systemctl restart containerd
+EOF
+ 
+# awk '{print "      -", $0}' /tmp/harbor.sh > /tmp/harbor.yaml
+# sed -i '204 e cat /tmp/harbor.yaml\n' ~/.tkg/providers/infrastructure-vsphere/v0.6.3/cluster-template-dev.yaml
+ 
+# rm /tmp/harbor.yaml /tmp/harbor.sh
