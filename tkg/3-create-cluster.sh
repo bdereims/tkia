@@ -4,10 +4,10 @@
 . ./password
 . ./env
 
-NAME=prodcluster
+NAME=devcluster
 PLAN=prod
 KUBE=v1.18.2+vmware.1
-CTLPLANE=3
+CTLPLANE=1
 WORKER=1
 
 export NAMESERVER="172.23.3.1"
