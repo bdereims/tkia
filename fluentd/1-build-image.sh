@@ -3,12 +3,12 @@
 
 . ./env
 
-REGISTRY=harbor.${DOMAIN}
-
 git clone https://github.com/vmware/fluent-plugin-vmware-loginsight
 cd fluent-plugin-vmware-loginsight/examples
-docker build --no-cache --file fluentd-vrli-plugin-photon-tdnf.dockerfile . --tag ${REGISTRY}/library/vrli:latest
+cp -r ../lib/fluent/plugin plugins 
+docker build --no-cache --file fluentd-vrli-plugin-debian.dockerfile . --tag ${REGISTRY}/library/log-collector:latest
+cd ../..
 rm -fr fluent-plugin-vmware-loginsight
 
-echo 4{REGISTRY_PASSWORD} | docker login ${REGISTRY}
-docker push  ${REGISTRY}/library/vrli:1
+echo ${REGISTRY_PASSWORD} | docker login ${REGISTRY}
+docker push ${REGISTRY}/library/log-collector:latest

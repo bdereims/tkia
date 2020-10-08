@@ -29,7 +29,7 @@ spec:
               apiVersion: v1
               fieldPath: spec.nodeName
         name: "log-collector"
-        image: "ra-harbor-registry.nfvrasv.com/tkg112/vrli:1"
+        image: "${REGISTRY}/library/log-collector:latest"
         imagePullPolicy: Always
         #command: ["sleep", "4800"]
         command: ["fluentd", "-c", "/fluentd/etc/fluent.conf", "-p", "/fluentd/plugins"]

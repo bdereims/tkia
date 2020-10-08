@@ -1,3 +1,14 @@
+# Fluentd plugin for VMware Log Insight
+# 
+# Copyright 2018 VMware, Inc. All Rights Reserved. 
+# 
+# This product is licensed to you under the MIT license (the "License").  You may not use this product except in compliance with the MIT License.  
+# 
+# This product may include a number of subcomponents with separate copyright notices and license terms. Your use of these subcomponents is subject to the terms and conditions of the subcomponent's license, as noted in the LICENSE file. 
+# 
+# SPDX-License-Identifier: MIT
+
+
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -8,415 +19,151 @@ data:
   fluent.conf: |
     # We can use this config to load some default config or load user defined config
     @include myapp-fluent.conf
- 
- 
+
   myapp-fluent.conf: |
     # Input sources
-    @include containers.input.conf
-    @include forward.input.conf
-    @include monitoring.conf
-    @include myapp-loginsight-output.conf
-    @include system.conf
-    @include system.input.conf
- 
- 
-  containers.input.conf: |-
+    @include general.conf
+    @include systemd.conf
+    @include kubernetes.conf
+    @include kube-audit.conf
+
+    # Forwading - Be vigilant of the order in which these plugins are specified. Order matters!
+    @include vmw-li.conf
+
+  general.conf: |
+    <system>
+      log_level info
+    </system>
+    # Prevent fluentd from handling records containing its own logs to handle cycles.
+    <label @FLUENT_LOG>
+      <match fluent.**>
+        @type null
+      </match>
+    </label>
+
+  systemd.conf: |
+    # Journal logs
     <source>
-      @id fluentd-containers.log
-      @type tail
-      path /var/log/containers/*.log
-      pos_file /var/log/containers.log.pos
-      exclude_path ["/var/log/containers/log-collector*.log"]
-      tag raw.kubernetes.*
+      @type systemd
+      @id in_systemd_logs
+      path /run/log/journal
+      # Can filter logs if we want, e.g.
+      #filters [{ "_SYSTEMD_UNIT": "kubelet.service" }]
+      <storage>
+        @type local
+        persistent true
+        path /var/log/fluentd-systemdlog.pos
+      </storage>
+      tag systemdlog
       read_from_head true
+      strip_underscores true
+    </source>
+
+  kubernetes.conf: |
+    # Container logs
+    # Kubernetes docker logs are stored under /var/lib/docker/containers for
+    # which kubernetes creates a symlink at /var/log/containers
+    <source>
+      @type tail
+      @id in_tail_container_logs
+      path /var/log/containers/*.log
+      # One could exclude certain logs like:
+      #exclude_path ["/var/log/containers/log-collector*.log"]
+      pos_file /var/log/fluentd-docker.pos
+      read_from_head true
+      # Set this watcher to false if you have many files to tail
+      enable_stat_watcher false
+      refresh_interval 5
+      tag kubernetes.*
       <parse>
-        @type multi_format
-        <pattern>
-          format json
-          time_key time
-          time_format %Y-%m-%dT%H:%M:%S.%NZ
-        </pattern>
-        <pattern>
-          format /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
-          time_format %Y-%m-%dT%H:%M:%S.%N%:z
-        </pattern>
+        @type json
+        time_key time
+        keep_time_key true
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
       </parse>
     </source>
- 
- 
-    # Detect exceptions in the log output and forward them as one log entry.
-    <match raw.kubernetes.**>
-      @id raw.kubernetes
-      @type detect_exceptions
-      remove_tag_prefix raw
-      message log
-      stream stream
-      multiline_flush_interval 5
-      max_bytes 500000
-      max_lines 1000
-    </match>
-    #
-    # Concatenate multi-line logs
-    <filter **>
-      @id filter_concat
-      @type concat
-      key message
-      multiline_end_regexp /\n$/
-      separator ""
-    </filter>
- 
- 
-    # Enriches records with Kubernetes metadata
+    # Kubernetes metadata filter that tags additional meta data for each container event
     <filter kubernetes.**>
-      @id filter_kubernetes_metadata
       @type kubernetes_metadata
+      @id filter_kube_metadata
+      kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.                  fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
+      verify_ssl "#{ENV['KUBERNETES_VERIFY_SSL'] || true}"
+      ca_file "#{ENV['KUBERNETES_CA_FILE']}"
+      skip_labels "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_LABELS'] || 'false'}"
+      skip_container_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_CONTAINER_METADATA'] || 'false'}"
+      skip_master_url "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_MASTER_URL'] || 'false'}"
+      skip_namespace_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_NAMESPACE_METADATA'] || 'false'}"
     </filter>
- 
- 
-    # Fixes json fields in Elasticsearch
-    <filter kubernetes.**>
-      @id filter_parser
-      @type parser
-      key_name log
-      reserve_data true
-      remove_key_name_field true
+
+    # Prefix the tag by namespace. This would make it easy to match logs by namespaces
+    <match kubernetes.**>
+      @type rewrite_tag_filter
+      <rule>
+        key $.kubernetes.namespace_name
+        pattern ^(.+)$
+        tag $1.${tag}
+      </rule>
+    </match>
+
+  kube-audit.conf: |
+    # Kube-apiserver audit logs
+    <source>
+      @type tail
+      @id in_tail_kube_audit_logs
+      # path to audit logs for kube-apiserver
+      path "/var/log/kube-audit/audit.log"
+      pos_file /var/log/kube-audit.pos
+      tag kube-audit
       <parse>
-        @type multi_format
-        <pattern>
-          format json
-        </pattern>
-        <pattern>
-          format none
-        </pattern>
+        @type json
+        time_key timestamp
+        keep_time_key false
+        time_format %Y-%m-%dT%H:%M:%SZ
       </parse>
+    </source>
+    # Loginsight doesn't support ingesting `source` as a field name, get rid of it
+    <filter kube-audit>
+      @type record_transformer
+      @id filter_kube_audit_logs
+      enable_ruby
+      remove_keys source
+      <record>
+        log ${record}
+      </record>
     </filter>
-  forward.input.conf: |-
-    # Takes the messages sent over TCP
-    <source>
-      @id forward
-      @type forward
-    </source>
-  monitoring.conf: |-
-    # Prometheus Exporter Plugin
-    # input plugin that exports metrics
-    <source>
-      @id prometheus
-      @type prometheus
-    </source>
- 
- 
-    <source>
-      @id monitor_agent
-      @type monitor_agent
-    </source>
- 
- 
-    # input plugin that collects metrics from MonitorAgent
-    <source>
-      @id prometheus_monitor
-      @type prometheus_monitor
-      <labels>
-        host ${hostname}
-      </labels>
-    </source>
- 
- 
-    # input plugin that collects metrics for output plugin
-    <source>
-      @id prometheus_output_monitor
-      @type prometheus_output_monitor
-      <labels>
-        host ${hostname}
-      </labels>
-    </source>
- 
- 
-    # input plugin that collects metrics for in_tail plugin
-    <source>
-      @id prometheus_tail_monitor
-      @type prometheus_tail_monitor
-      <labels>
-        host ${hostname}
-      </labels>
-    </source>
-  myapp-loginsight-output.conf: |
+
+  vmw-li.conf: |
+    # Match everything
     # We are capturing all log messages and redirecting them to endpoints mentioned in each <store> tag.
     # One may redirect these logs to muliple endpoints (including multiple LI instances).
     # Or one may chose to tag their specific logs and add their own config to capture those tagged logs and redirect
-    # them to appropriate endpoint. This specific config needs to preceed this generic one.
+    # them to appropriate endpoint. That specific config needs to preceed this generic one.
     <match **>
       @type copy
       <store>
-        @type "vmware_loginsight"
-        scheme http
-        ssl_verify false
+        @type vmware_loginsight
+        @id out_vmw_li_all_container_logs
+        scheme https
+        ssl_verify false 
         # Loginsight host: One may use IP address or cname
-        # host X.X.X.X
-        host 172.16.52.14
-        username admin
-        password NFVra03@km
-        port 9000
-        path api/v1/events/ingest
-        # agent_id XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-        http_method post
-        serializer json
-        rate_limit_msec 0
-        http_conn_debug true
-        raise_on_error false
-        include_tag_key true
-        tag_key tag
+        #host X.X.X.X
+        host ${VRLI} 
+        port 9543
+        agent_id ${AGENTID} 
+        # Keys from log event whose values should be added as log message/text to
+        # Loginsight. Note these key/value pairs  won't be added as metadata/fields
+        log_text_keys ["log","msg","message"]
+        # Use this flag if you want to enable http debug logs
+        http_conn_debug false
       </store>
-      # If we want to debug and send logs to stdout as well
-      # <store>
-      #   @type stdout
-      # </store>
+      # copy plugin supports sending/copying logs to multiple plugins
+      # One may choose to send them to multiple LIs
+      # Or one may want send a copy to stdout for debugging
+      # Please note, if you use stdout along with LI, catch the logger's log to make
+      # sure they're not cyclic
+      #<store>
+      #  @type stdout
+      #</store>
     </match>
- 
- 
-  system.conf: |-
-    <system>
-      root_dir /tmp/fluentd-buffers/
-    </system>
-  system.input.conf: |-
-    # Example:
-    # 2015-12-21 23:17:22,066 [salt.state       ][INFO    ] Completed state [net.ipv4.ip_forward] at time 23:17:22.066081
-    <source>
-      @id minion
-      @type tail
-      format /^(?<time>[^ ]* [^ ,]*)[^\[]*\[[^\]]*\]\[(?<severity>[^ \]]*) *\] (?<message>.*)$/
-      time_format %Y-%m-%d %H:%M:%S
-      path /var/log/salt/minion
-      pos_file /var/log/salt.pos
-      tag salt
-    </source>
- 
- 
-    # Example:
-    # Dec 21 23:17:22 gke-foo-1-1-4b5cbd14-node-4eoj startupscript: Finished running startup script /var/run/google.startup.script
-    <source>
-      @id startupscript.log
-      @type tail
-      format syslog
-      path /var/log/startupscript.log
-      pos_file /var/log/startupscript.log.pos
-      tag startupscript
-    </source>
- 
- 
-    # Examples:
-    # time="2016-02-04T06:51:03.053580605Z" level=info msg="GET /containers/json"
-    # time="2016-02-04T07:53:57.505612354Z" level=error msg="HTTP Error" err="No such image: -f" statusCode=404
-    # TODO(random-liu): Remove this after cri container runtime rolls out.
-    <source>
-      @id docker.log
-      @type tail
-      format /^time="(?<time>[^)]*)" level=(?<severity>[^ ]*) msg="(?<message>[^"]*)"( err="(?<error>[^"]*)")?( statusCode=($<status_code>\d+))?/
-      path /var/log/docker.log
-      pos_file /var/log/docker.log.pos
-      tag docker
-    </source>
- 
- 
-    # Example:
-    # 2016/02/04 06:52:38 filePurge: successfully removed file /var/etcd/data/member/wal/00000000000006d0-00000000010a23d1.wal
-    <source>
-      @id etcd.log
-      @type tail
-      # Not parsing this, because it doesn't have anything particularly useful to
-      # parse out of it (like severities).
-      format none
-      path /var/log/etcd.log
-      pos_file /var/log/etcd.log.pos
-      tag etcd
-    </source>
- 
- 
-    # Multi-line parsing is required for all the kube logs because very large log
-    # statements, such as those that include entire object bodies, get split into
-    # multiple lines by glog.
-    # Example:
-    # I0204 07:32:30.020537    3368 server.go:1048] POST /stats/container/: (13.972191ms) 200 [[Go-http-client/1.1] 10.244.1.3:40537]
-    <source>
-      @id kubelet.log
-      @type tail
-      format multiline
-      multiline_flush_interval 5s
-      format_firstline /^\w\d{4}/
-      format1 /^(?<severity>\w)(?<time>\d{4} [^\s]*)\s+(?<pid>\d+)\s+(?<source>[^ \]]+)\] (?<message>.*)/
-      time_format %m%d %H:%M:%S.%N
-      path /var/log/kubelet.log
-      pos_file /var/log/kubelet.log.pos
-      tag kubelet
-    </source>
- 
- 
-    # Example:
-    # I1118 21:26:53.975789       6 proxier.go:1096] Port "nodePort for kube-system/default-http-backend:http" (:31429/tcp) was open before and is still needed
-    <source>
-      @id kube-proxy.log
-      @type tail
-      format multiline
-      multiline_flush_interval 5s
-      format_firstline /^\w\d{4}/
-      format1 /^(?<severity>\w)(?<time>\d{4} [^\s]*)\s+(?<pid>\d+)\s+(?<source>[^ \]]+)\] (?<message>.*)/
-      time_format %m%d %H:%M:%S.%N
-      path /var/log/kube-proxy.log
-      pos_file /var/log/kube-proxy.log.pos
-      tag kube-proxy
-    </source>
- 
- 
-    # Example:
-    # I0204 07:00:19.604280       5 handlers.go:131] GET /api/v1/nodes: (1.624207ms) 200 [[kube-controller-manager/v1.1.3 (linux/amd64) kubernetes/6a81b50] 127.0.0.1:38266]
-    <source>
-      @id kube-apiserver.log
-      @type tail
-      format multiline
-      multiline_flush_interval 5s
-      format_firstline /^\w\d{4}/
-      format1 /^(?<severity>\w)(?<time>\d{4} [^\s]*)\s+(?<pid>\d+)\s+(?<source>[^ \]]+)\] (?<message>.*)/
-      time_format %m%d %H:%M:%S.%N
-      path /var/log/kube-apiserver.log
-      pos_file /var/log/kube-apiserver.log.pos
-      tag kube-apiserver
-    </source>
- 
- 
-    # Example:
-    # I0204 06:55:31.872680       5 servicecontroller.go:277] LB already exists and doesn't need update for service kube-system/kube-ui
-    <source>
-      @id kube-controller-manager.log
-      @type tail
-      format multiline
-      multiline_flush_interval 5s
-      format_firstline /^\w\d{4}/
-      format1 /^(?<severity>\w)(?<time>\d{4} [^\s]*)\s+(?<pid>\d+)\s+(?<source>[^ \]]+)\] (?<message>.*)/
-      time_format %m%d %H:%M:%S.%N
-      path /var/log/kube-controller-manager.log
-      pos_file /var/log/kube-controller-manager.log.pos
-      tag kube-controller-manager
-    </source>
- 
- 
-    # Example:
-    # W0204 06:49:18.239674       7 reflector.go:245] pkg/scheduler/factory/factory.go:193: watch of *api.Service ended with: 401: The event in requested index is outdated and cleared (the requested history has been cleared [2578313/2577886]) [2579312]
-    <source>
-      @id kube-scheduler.log
-      @type tail
-      format multiline
-      multiline_flush_interval 5s
-      format_firstline /^\w\d{4}/
-      format1 /^(?<severity>\w)(?<time>\d{4} [^\s]*)\s+(?<pid>\d+)\s+(?<source>[^ \]]+)\] (?<message>.*)/
-      time_format %m%d %H:%M:%S.%N
-      path /var/log/kube-scheduler.log
-      pos_file /var/log/kube-scheduler.log.pos
-      tag kube-scheduler
-    </source>
- 
- 
-    # Example:
-    # I0603 15:31:05.793605       6 cluster_manager.go:230] Reading config from path /etc/gce.conf
-    <source>
-      @id glbc.log
-      @type tail
-      format multiline
-      multiline_flush_interval 5s
-      format_firstline /^\w\d{4}/
-      format1 /^(?<severity>\w)(?<time>\d{4} [^\s]*)\s+(?<pid>\d+)\s+(?<source>[^ \]]+)\] (?<message>.*)/
-      time_format %m%d %H:%M:%S.%N
-      path /var/log/glbc.log
-      pos_file /var/log/glbc.log.pos
-      tag glbc
-    </source>
- 
- 
-    # Example:
-    # TODO Add a proper example here.
-    <source>
-      @id cluster-autoscaler.log
-      @type tail
-      format multiline
-      multiline_flush_interval 5s
-      format_firstline /^\w\d{4}/
-      format1 /^(?<severity>\w)(?<time>\d{4} [^\s]*)\s+(?<pid>\d+)\s+(?<source>[^ \]]+)\] (?<message>.*)/
-      time_format %m%d %H:%M:%S.%N
-      path /var/log/cluster-autoscaler.log
-      pos_file /var/log/cluster-autoscaler.log.pos
-      tag cluster-autoscaler
-    </source>
- 
- 
-    # Logs from systemd-journal for interesting services.
-    # TODO(random-liu): Remove this after cri container runtime rolls out.
-    <source>
-      @id journald-docker
-      @type systemd
-      matches [{ "_SYSTEMD_UNIT": "docker.service" }]
-      <storage>
-        @type local
-        persistent true
-        path /var/log/journald-docker.pos
-      </storage>
-      read_from_head true
-      tag docker
-    </source>
- 
- 
-    <source>
-      @id journald-container-runtime
-      @type systemd
-      matches [{ "_SYSTEMD_UNIT": "{{ fluentd_container_runtime_service }}.service" }]
-      <storage>
-        @type local
-        persistent true
-        path /var/log/journald-container-runtime.pos
-      </storage>
-      read_from_head true
-      tag container-runtime
-    </source>
- 
- 
-    <source>
-      @id journald-kubelet
-      @type systemd
-      matches [{ "_SYSTEMD_UNIT": "kubelet.service" }]
-      <storage>
-        @type local
-        persistent true
-        path /var/log/journald-kubelet.pos
-      </storage>
-      read_from_head true
-      tag kubelet
-    </source>
- 
- 
-    <source>
-      @id journald-node-problem-detector
-      @type systemd
-      matches [{ "_SYSTEMD_UNIT": "node-problem-detector.service" }]
-      <storage>
-        @type local
-        persistent true
-        path /var/log/journald-node-problem-detector.pos
-      </storage>
-      read_from_head true
-      tag node-problem-detector
-    </source>
- 
- 
-    <source>
-      @id kernel
-      @type systemd
-      matches [{ "_TRANSPORT": "kernel" }]
-      <storage>
-        @type local
-        persistent true
-        path /var/log/kernel.pos
-      </storage>
-      <entry>
-        fields_strip_underscores true
-        fields_lowercase true
-      </entry>
-      read_from_head true
-      tag kernel
-    </source>
+
+

@@ -3,8 +3,14 @@
 
 . ./env
 
-REGISTRY=harbor.${DOMAIN}
+kubectl_apply() {
+eval "cat <<EOF
+$(<$1)
+EOF" | kubectl apply -f -
+}
 
-kubectl apply -f fluentd-configmap.yaml -n kube-system
+kubectl_apply fluentd-configmap.yaml
 kubectl apply -f fluentd-cluster-role.yaml
-kubectl apply -f fluentd-daemonset.yaml
+kubectl_apply fluentd-daemonset.yaml
+
+watch -n1 kubectl -n kube-system get pods

@@ -1,1 +1,7 @@
+. ./password
+
 export DOMAIN=cpod-vs67u3.az-rbx.cloud-garage.net
+export REGISTRY=harbor.${DOMAIN}
+
+export VRLI=vrli.az-rbx.cloud-garage.net
+export AGENTID=xxx 

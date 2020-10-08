@@ -5,10 +5,10 @@
 . ./env
 
 NAME=devcluster
-PLAN=prod
+PLAN=dev
 KUBE=v1.18.2+vmware.1
 CTLPLANE=1
-WORKER=1
+WORKER=3
 
 export NAMESERVER="172.23.3.1"
 export DOMAIN="cpod-vs67u3.az-rbx.cloud-garage.net"
