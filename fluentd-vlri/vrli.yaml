@@ -1,0 +1,184 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+  namespace: kube-system
+data:
+  fluent.conf: |-
+    <source>
+      @id in_tail_container_logs
+      @type tail
+      path /var/log/containers/*.log
+      pos_file /var/log/fluentd-containers.log.pos
+      tag raw.kubernetes.*
+      read_from_head true
+      <parse>
+        @type multi_format
+        <pattern>
+          format json
+          time_key time
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+        </pattern>
+        <pattern>
+          format /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N%:z
+        </pattern>
+      </parse>
+    </source>
+
+    # Detect exceptions in the log output and forward them as one log entry.
+    <match raw.kubernetes.**>
+      @id raw.kubernetes
+      @type detect_exceptions
+      remove_tag_prefix raw
+      message log
+      stream stream
+      multiline_flush_interval 5
+      max_bytes 500000
+      max_lines 1000
+    </match>
+
+    # Concatenate multi-line logs
+    <filter **>
+      @id filter_concat
+      @type concat
+      key message
+      multiline_end_regexp /\n$/
+      separator ""
+    </filter>
+
+    <filter kubernetes.**>
+      @type record_transformer
+      <record>
+      environment tanzu_k8s_grid
+      log_type kubernetes
+      </record>
+      watch false
+    </filter>
+
+    # Enriches records with Kubernetes metadata
+    <filter kubernetes.**>
+      @id filter_kubernetes_metadata
+      @type kubernetes_metadata
+      watch false
+    </filter>
+
+    <match **>
+      @type copy
+      <store>
+        @type vmware_loginsight
+        @id out_vmw_li_all_container_logs
+        scheme https
+        ssl_verify false
+        host ${VRLI_HOST} 
+        port 9543
+        log_text_keys ["log","msg","message"]
+        http_conn_debug false
+      </store>
+      #<store>
+      #  @type stdout
+      #</store>
+    </match>
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: fluentd
+  name: fluentd-logging
+  namespace: kube-system
+
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: fluentd-clusterrole
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - "namespaces"
+      - "pods"
+    verbs:
+      - "list"
+      - "get"
+      - "watch"
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: fluentd-clusterrole
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: fluentd-clusterrole
+subjects:
+- kind: ServiceAccount
+  name: fluentd-logging
+  namespace: kube-system
+
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fluentd-logging
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logging
+    app: fluentd-logging
+    version: v1
+    kubernetes.io/cluster-service: "true"
+spec:
+ selector:
+   matchLabels:
+     name: fluentd-logging
+ template:
+   metadata:
+     labels:
+       name: fluentd-logging
+       app: fluentd-logging
+       version: v1
+       kubernetes.io/cluster-service: "true"
+   spec:
+     serviceAccount: fluentd-logging
+     serviceAccountName: fluentd-logging
+     tolerations:
+     - key: node-role.kubernetes.io/master
+       effect: NoSchedule
+     containers:
+     - name: fluentd
+       image: ${REGISTRY}/${PROJECT}/${IMAGE_NAME}:${IMAGE_RELEASE} 
+       command: ["fluentd", "-c", "/fluentd/etc/fluent.conf", "-p", "/fluentd/plugins"]
+       env:
+       - name: FLUENTD_ARGS
+         value: --no-supervisor -q
+       - name: K8S_NODE_NAME
+         valueFrom:
+           fieldRef:
+             apiVersion: v1
+             fieldPath: spec.nodeName
+       resources:
+         limits:
+           memory: 500Mi
+         requests:
+           cpu: 100m
+           memory: 200Mi
+       volumeMounts:
+       - name: varlog
+         mountPath: /var/log
+       - name: varlogcontainers
+         mountPath: /var/log/containers
+       - name: fluentdconfig
+         mountPath: /fluentd/etc
+     volumes:
+     - name: varlog
+       hostPath:
+         path: /var/log
+     - name: varlogcontainers
+       hostPath:
+         path: /var/log/containers
+     - name: fluentdconfig
+       configMap:
+         name: "fluentd-config"
