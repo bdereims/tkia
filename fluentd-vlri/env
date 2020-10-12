@@ -1,0 +1,13 @@
+#!/bin/bash
+#bdereims@vmware
+
+. ./password
+
+export DOMAIN=cpod-vs67u3.az-rbx.cloud-garage.net
+export REGISTRY=harbor.${DOMAIN}
+
+export IMAGE_NAME=vrli
+export IMAGE_RELEASE=latest
+export PROJECT=library
+
+export VRLI_HOST=vrli.az-rbx.cloud-garage.net

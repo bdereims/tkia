@@ -1,0 +1,169 @@
+# Fluentd plugin for VMware Log Insight
+# 
+# Copyright 2018 VMware, Inc. All Rights Reserved. 
+# 
+# This product is licensed to you under the MIT license (the "License").  You may not use this product except in compliance with the MIT License.  
+# 
+# This product may include a number of subcomponents with separate copyright notices and license terms. Your use of these subcomponents is subject to the terms and conditions of the subcomponent's license, as noted in the LICENSE file. 
+# 
+# SPDX-License-Identifier: MIT
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+  namespace: kube-system
+data:
+  fluent.conf: |
+    # We can use this config to load some default config or load user defined config
+    @include myapp-fluent.conf
+
+  myapp-fluent.conf: |
+    # Input sources
+    @include general.conf
+    @include systemd.conf
+    @include kubernetes.conf
+    @include kube-audit.conf
+
+    # Forwading - Be vigilant of the order in which these plugins are specified. Order matters!
+    @include vmw-li.conf
+
+  general.conf: |
+    <system>
+      log_level info
+    </system>
+    # Prevent fluentd from handling records containing its own logs to handle cycles.
+    <label @FLUENT_LOG>
+      <match fluent.**>
+        @type null
+      </match>
+    </label>
+
+  systemd.conf: |
+    # Journal logs
+    <source>
+      @type systemd
+      @id in_systemd_logs
+      path /run/log/journal
+      # Can filter logs if we want, e.g.
+      #filters [{ "_SYSTEMD_UNIT": "kubelet.service" }]
+      <storage>
+        @type local
+        persistent true
+        path /var/log/fluentd-systemdlog.pos
+      </storage>
+      tag systemdlog
+      read_from_head true
+      strip_underscores true
+    </source>
+
+  kubernetes.conf: |
+    # Container logs
+    # Kubernetes docker logs are stored under /var/lib/docker/containers for
+    # which kubernetes creates a symlink at /var/log/containers
+    <source>
+      @type tail
+      @id in_tail_container_logs
+      path /var/log/containers/*.log
+      # One could exclude certain logs like:
+      #exclude_path ["/var/log/containers/log-collector*.log"]
+      pos_file /var/log/fluentd-docker.pos
+      read_from_head true
+      # Set this watcher to false if you have many files to tail
+      enable_stat_watcher false
+      refresh_interval 5
+      tag kubernetes.*
+      <parse>
+        @type json
+        time_key time
+        keep_time_key true
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+      </parse>
+    </source>
+    # Kubernetes metadata filter that tags additional meta data for each container event
+    <filter kubernetes.**>
+      @type kubernetes_metadata
+      @id filter_kube_metadata
+      kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.                  fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
+      verify_ssl "#{ENV['KUBERNETES_VERIFY_SSL'] || true}"
+      ca_file "#{ENV['KUBERNETES_CA_FILE']}"
+      skip_labels "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_LABELS'] || 'false'}"
+      skip_container_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_CONTAINER_METADATA'] || 'false'}"
+      skip_master_url "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_MASTER_URL'] || 'false'}"
+      skip_namespace_metadata "#{ENV['FLUENT_KUBERNETES_METADATA_SKIP_NAMESPACE_METADATA'] || 'false'}"
+    </filter>
+
+    # Prefix the tag by namespace. This would make it easy to match logs by namespaces
+    <match kubernetes.**>
+      @type rewrite_tag_filter
+      <rule>
+        key $.kubernetes.namespace_name
+        pattern ^(.+)$
+        tag $1.${tag}
+      </rule>
+    </match>
+
+  kube-audit.conf: |
+    # Kube-apiserver audit logs
+    <source>
+      @type tail
+      @id in_tail_kube_audit_logs
+      # path to audit logs for kube-apiserver
+      path "/var/log/kube-audit/audit.log"
+      pos_file /var/log/kube-audit.pos
+      tag kube-audit
+      <parse>
+        @type json
+        time_key timestamp
+        keep_time_key false
+        time_format %Y-%m-%dT%H:%M:%SZ
+      </parse>
+    </source>
+    # Loginsight doesn't support ingesting `source` as a field name, get rid of it
+    <filter kube-audit>
+      @type record_transformer
+      @id filter_kube_audit_logs
+      enable_ruby
+      remove_keys source
+      <record>
+        log ${record}
+      </record>
+    </filter>
+
+  vmw-li.conf: |
+    # Match everything
+    # We are capturing all log messages and redirecting them to endpoints mentioned in each <store> tag.
+    # One may redirect these logs to muliple endpoints (including multiple LI instances).
+    # Or one may chose to tag their specific logs and add their own config to capture those tagged logs and redirect
+    # them to appropriate endpoint. That specific config needs to preceed this generic one.
+    <match **>
+      @type copy
+      <store>
+        @type vmware_loginsight
+        @id out_vmw_li_all_container_logs
+        scheme https
+        ssl_verify false 
+        # Loginsight host: One may use IP address or cname
+        #host X.X.X.X
+        host ${VRLI} 
+        port 9543
+        agent_id ${AGENTID} 
+        # Keys from log event whose values should be added as log message/text to
+        # Loginsight. Note these key/value pairs  won't be added as metadata/fields
+        log_text_keys ["log","msg","message"]
+        # Use this flag if you want to enable http debug logs
+        http_conn_debug false
+      </store>
+      # copy plugin supports sending/copying logs to multiple plugins
+      # One may choose to send them to multiple LIs
+      # Or one may want send a copy to stdout for debugging
+      # Please note, if you use stdout along with LI, catch the logger's log to make
+      # sure they're not cyclic
+      #<store>
+      #  @type stdout
+      #</store>
+    </match>
+
+
