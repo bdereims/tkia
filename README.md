@@ -24,6 +24,10 @@ Brice
 - [Backup/Restore with Velero](https://velero.io/)
 - [Cluster Conformance with Sonobuoy](https://sonobuoy.io/)
 
+## Tanzu RTFM
+- [vSphere with Tanzu](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-152BE7D2-E227-4DAA-B527-557B564D9718.html)
+- [Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/index.html)
+
 ## Tanzu & Cloud Partners
 - [Tanzu on Microsft Azure](https://tanzu.vmware.com/partners/microsoft-azure)
 - [Tanzu on Google Cloud](https://tanzu.vmware.com/partners/google)
@@ -73,7 +77,6 @@ HOL are available [here](https://labs.hol.vmware.com)
 - [Metanext](https://www.metanext.com/) one of our partners on Tanzu
 
 ## VMworld 2020 Sessions
-[Register and Schedule](https://www.vmworld.com/en/index.html) your VMworld sessions, it's free of charge.
 - Kubernetes Operators for VMware Tanzu Kubernetes Grid - KUB1248
 - Connect and Secure Your Applications Through Tanzu Service Mesh - MAP2081
 - Consuming Trusted Content from Tanzu Application Catalog - MAP2552

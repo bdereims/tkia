@@ -1,4 +1,4 @@
 #!/bin/bash
 #bdereims@vmware.com
 
-kubectl vsphere login --insecure-skip-tls-verify --server supervisor-api.cpod-delicate-viper.az-demo.shwrfr.com --vsphere-username administrator@cpod-delicate-viper.az-demo.shwrfr.com 
+kubectl vsphere login --insecure-skip-tls-verify --server supervisor.cpod-vs7u1.az-rbx.cloud-garage.net  --vsphere-username administrator@cpod-vs7u1.az-rbx.cloud-garage.net
