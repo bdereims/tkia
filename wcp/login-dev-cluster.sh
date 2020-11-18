@@ -1,1 +1,0 @@
-kubectl vsphere login --insecure-skip-tls-verify --server supervisor.cpod-vs7u1.az-rbx.cloud-garage.net  --vsphere-username administrator@cpod-vs7u1.az-rbx.cloud-garage.net --tanzu-kubernetes-cluster-name dev-cluster --tanzu-kubernetes-cluster-namespace tkg-clusters

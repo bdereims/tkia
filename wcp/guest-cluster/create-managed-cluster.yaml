@@ -1,18 +1,18 @@
 apiVersion: run.tanzu.vmware.com/v1alpha1
 kind: TanzuKubernetesCluster 
 metadata:
-  name: infra-cluster 
+  name: qa-cluster 
   namespace: tkg-clusters
 spec:
   topology:
     controlPlane:
-      count: 3 
+      count: 1 
       class: guaranteed-small # vmclass to be used for master(s)
-      storageClass: tanzu-storage-policy 
+      storageClass: fast-kubernetes-policy 
     workers:
       count: 3
       class: guaranteed-small # vmclass to be used for workers(s)
-      storageClass: tanzu-storage-policy 
+      storageClass: fast-kubernetes-policy 
   distribution:
     version: v1.18.5
   settings:
