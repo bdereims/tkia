@@ -1,3 +1,4 @@
 config
 password
+.password
 ca.crt
