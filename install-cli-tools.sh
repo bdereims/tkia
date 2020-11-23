@@ -8,6 +8,8 @@ SHIP_VERSION=0.40.0
 STERN_VERSION=1.11.0
 COMPLETIONS=/etc/bash_completion.d
 
+apt-get -y install curl jq
+
 curl -L -o /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-Linux-x86_64 && chmod +x /usr/local/bin/docker-compose
 
 curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && chmod +x /usr/local/bin/kubectl
