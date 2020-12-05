@@ -1,25 +1,25 @@
 apiVersion: run.tanzu.vmware.com/v1alpha1
-kind: TanzuKubernetesCluster 
+kind: TanzuKubernetesCluster
 metadata:
   name: dev-cluster
-  namespace: tkg-service
+  namespace: tkg-service 
 spec:
-  topology:
-    controlPlane:
-      count: 1 
-      class: best-effort-small # vmclass to be used for master(s)
-      storageClass: tanzu 
-    workers:
-      count: 3
-      class: best-effort-small # vmclass to be used for workers(s)
-      storageClass: tanzu 
-  distribution:
-    version: v1.18.5+vmware.1-tkg.1.c40d30d 
-  settings:
+ topology:
+   controlPlane:
+     count: 1 
+     class: best-effort-xsmall
+     storageClass: tanzu 
+   workers:
+     count: 3
+     class: best-effort-xsmall
+     storageClass: tanzu 
+ distribution:
+   version: v1.18.5
+ settings:
     network:
       cni:
-        name: antrea 
+        name: antrea  #But could be left blank if using the default
       services:
-        cidrBlocks: ["10.43.0.0/16"]
+        cidrBlocks: ["10.99.0.0/16"]
       pods:
-        cidrBlocks: ["10.44.0.0/16"]
+        cidrBlocks: ["10.98.0.0/16"]
