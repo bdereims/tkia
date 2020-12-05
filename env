@@ -1,5 +1,5 @@
-export DOMAIN=cpod-wd01.az-fkd.cloud-garage.net
-export SUPERVISOR=kubapi.${DOMAIN}
-export TANZU_USER=administrator@vsphere.local
+export DOMAIN=cpod-airgapped.az-rbx.cloud-garage.net
+export SUPERVISOR=supervisor.${DOMAIN}
+export TANZU_USER=administrator@${DOMAIN}
 
 . ./password
