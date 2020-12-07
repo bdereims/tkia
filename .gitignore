@@ -2,3 +2,4 @@ config
 password
 .password
 ca.crt
+node-ca-updater-daemonset.yaml
