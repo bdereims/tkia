@@ -27,6 +27,7 @@ Brice
 ## Tanzu RTFM
 - [vSphere with Tanzu](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-152BE7D2-E227-4DAA-B527-557B564D9718.html)
 - [Tanzu Kubernetes Grid](https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/index.html)
+- [Tanzu PoC Guide](https://core.vmware.com/resource/tanzu-proof-concept-guide#_Toc56496942)
 
 ## Tanzu & Cloud Partners
 - [Tanzu on Microsft Azure](https://tanzu.vmware.com/partners/microsoft-azure)
