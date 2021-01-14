@@ -24,6 +24,7 @@ Brice
 - [Cluster API](https://github.com/kubernetes-sigs/cluster-api)
 - [Backup/Restore with Velero](https://velero.io/)
 - [Cluster Conformance with Sonobuoy](https://sonobuoy.io/)
+- [Carvel tools suite](https://carvel.dev/)
 
 ## Tanzu RTFM
 - [vSphere with Tanzu](https://docs.vmware.com/en/VMware-vSphere/7.0/vmware-vsphere-with-tanzu/GUID-152BE7D2-E227-4DAA-B527-557B564D9718.html)
