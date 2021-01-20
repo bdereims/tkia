@@ -43,6 +43,7 @@ Brice
 
 ## BLOGs / VLOGs
 - [My Cloud Garage Blog](https://blog.cloud-garage.net)
+- [Joe Beda's TGI Kubernetes and other awesome videos](https://www.youtube.com/channel/UCdkGV51Nu0unDNT58bHt9bg)
 - [TKG in multitenant setup](https://tanzu.vmware.com/content/practitioners/a-closer-look-at-vmware-tanzu-kubernetes-grid-multitenant-setup)
 - [vSphere with Kubernetes demo](https://www.youtube.com/watch?v=GCW4GtdCHLc)
 - [Cloud Native Storage (CNS) in vSphere with Kubernetes/Tanzu](https://cormachogan.com/2020/07/21/cloud-native-storage-cns-in-vsphere-with-kubernetes-tanzu-video/)
