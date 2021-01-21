@@ -1,20 +1,20 @@
 apiVersion: run.tanzu.vmware.com/v1alpha1
 kind: TanzuKubernetesCluster
 metadata:
-  name: dev-cluster
+  name: devcluster
   namespace: tkg-service 
 spec:
  topology:
    controlPlane:
      count: 1 
-     class: best-effort-xsmall
-     storageClass: tanzu 
+     class: best-effort-small
+     storageClass: k8s 
    workers:
      count: 3
-     class: best-effort-xsmall
-     storageClass: tanzu 
+     class: best-effort-small
+     storageClass: k8s 
  distribution:
-   version: v1.18.5
+   version: v1.18
  settings:
     network:
       cni:

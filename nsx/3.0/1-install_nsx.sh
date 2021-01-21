@@ -84,7 +84,7 @@ install_nsx_edge() {
 	rm ${TEMP}
 }
 
-install_nsx_manager
+#install_nsx_manager
 install_nsx_edge
 
 printf "\n\n###\n### Wait until complet startup of Manager & Edge...\n###\n### Add license ASAP before to go to the next step.\n###\n\n"

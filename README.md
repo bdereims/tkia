@@ -54,6 +54,7 @@ Brice
 - [vSphere 7.0, Cloud Native Storage, CSI and offline volume extend](https://cormachogan.com/2020/04/23/vsphere-7-0-cloud-native-storage-csi-and-offline-volume-extend/)
 - Become a [Modern Apps Ninja](https://www.modernapps.ninja/)
 - [HA Proxy as type Load Balancer for vSphere with Tanzu](https://cormachogan.com/2020/09/28/enabling-vsphere-with-tanzu-using-ha-proxy/)
+- [Velero & Restic Doc](https://github.com/vmware-tanzu/velero/blob/master/site/docs/master/restic.md)
 
 ## Hands on Lab
 HOL are available [here](https://labs.hol.vmware.com)

@@ -9,20 +9,20 @@ export BITS=/data/BITS
 # Generic credentials 
 export ADMIN="admin"
 # DNS Zone
-export DOMAIN="cpod-airgapped.az-rbx.cloud-garage.net"
+export DOMAIN="cpod-tanzu.az-rbx.cloud-garage.net"
 
 # vCenter attributes
 export VCENTER_IP="vcsa.${DOMAIN}"
 export VCENTER_USERNAME="administrator%40${DOMAIN}"
 export VCENTER_PASSWORD=${PASSWORD}
-export VCENTER_DATACENTER="cPod-AIRGAPPED"
+export VCENTER_DATACENTER="cPod-TANZU"
 export VCENTER_CLUSTER="Cluster"
 export VCENTER_TARGET="${VCENTER_IP}/${VCENTER_DATACENTER}/host/${VCENTER_CLUSTER}"
 export VCENTER_DATASTORE="nfsDatastore"
 export VCENTER_PORTGROUP="VM Network"
 
 # Some network stuffs
-export BASE_SUBNET="172.23.2"
+export BASE_SUBNET="172.23.1"
 export NETMASK="255.255.255.0"
 export GATEWAY="${BASE_SUBNET}.1"
 export DNS="${GATEWAY}"
@@ -44,8 +44,10 @@ export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/${VCENTER_CLUSTER}/Resources
 
 # NSX OVA files
 export BITS_NSX=NSX
-export NSX_MANAGER_OVA_FILE=${BITS}/${BITS_NSX}/nsx-unified-appliance-3.1.0.0.0.17107171.ova
-export NSX_EDGE_OVA_FILE=${BITS}/${BITS_NSX}/nsx-edge-3.1.0.0.0.17107177.ova
+#export NSX_MANAGER_OVA_FILE=${BITS}/${BITS_NSX}/nsx-unified-appliance-3.1.0.0.0.17107171.ova
+#export NSX_EDGE_OVA_FILE=${BITS}/${BITS_NSX}/nsx-edge-3.1.0.0.0.17107177.ova
+export NSX_MANAGER_OVA_FILE=${BITS}/${BITS_NSX}/nsx-unified-appliance-3.0.0.0.0.15946739.ova
+export NSX_EDGE_OVA_FILE=${BITS}/${BITS_NSX}/nsx-edge-3.0.0.0.0.15946012.ova
 
 # VM names on vCenter
 export NSX_MANAGER_NAME=NSX-T_manager
