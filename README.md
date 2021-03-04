@@ -80,6 +80,7 @@ HOL are available [here](https://labs.hol.vmware.com)
 
 ## Ecosystem
 - [Metanext](https://www.metanext.com/) one of our partners on Tanzu
+- [Openshift 4.7 on vSphere](https://hackmd.io/@ac09081979/OCP47-vSphere) describing how to install and leverage SDDC for Openshift (in French)
 
 ## VMworld 2020 Sessions
 - Kubernetes Operators for VMware Tanzu Kubernetes Grid - KUB1248
