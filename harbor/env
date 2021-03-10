@@ -1,3 +1,3 @@
-export DOMAIN=cpod-vs67u3.az-rbx.cloud-garage.net
-export NAMESERVER=172.23.3.1
+export DOMAIN=vmware.local
+export NAMESERVER=192.168.191.31
 export PASSWORD=harbor

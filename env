@@ -1,5 +1,5 @@
-export DOMAIN=cpod-tanzu.az-rbx.cloud-garage.net
-export SUPERVISOR=kubapi.${DOMAIN}
-export TANZU_USER=administrator@${DOMAIN}
+export DOMAIN=vmware.local
+export SUPERVISOR=supervisor.${DOMAIN}
+export TANZU_USER=administrator@vsphere.local
 
 . ./password

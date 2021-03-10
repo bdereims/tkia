@@ -1,8 +1,38 @@
-
 apiVersion: v1
 data:
   ca.pem: |+
     -----BEGIN CERTIFICATE-----
+    MIIFvTCCA6WgAwIBAgIJAKJ/qv9WahUrMA0GCSqGSIb3DQEBDQUAMHUxCzAJBgNV
+    BAYTAkZSMQ4wDAYDVQQIDAVQYXJpczEOMAwGA1UEBwwFUGFyaXMxFTATBgNVBAoM
+    DGNsb3VkLWdhcmFnZTERMA8GA1UECwwIc2VydmljZXMxHDAaBgNVBAMME2hhcmJv
+    ci52bXdhcmUubG9jYWwwHhcNMjEwMzEwMTc1NjI0WhcNMzEwMzA4MTc1NjI0WjB1
+    MQswCQYDVQQGEwJGUjEOMAwGA1UECAwFUGFyaXMxDjAMBgNVBAcMBVBhcmlzMRUw
+    EwYDVQQKDAxjbG91ZC1nYXJhZ2UxETAPBgNVBAsMCHNlcnZpY2VzMRwwGgYDVQQD
+    DBNoYXJib3Iudm13YXJlLmxvY2FsMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIIC
+    CgKCAgEArf+5LpLVB7QDFXXvB+OKwkNcCoewAdvt+ECmLCSl0gxZV8DpPuZPo2wC
+    A4m22jA03CCnrBGBKcna69LLiPhpgUMUh0XKODnU8DU/WuxjPWSjTPpSCDKq1NpC
+    2te2/e3bnM9JnSCOh5G0XPfdAb0/tF7UrnLeRBin6XLODHMJ+JKcMlDhBXVfI/Un
+    xdjwbbYcrjt51PfKJQjoaGHuoIAiDD1WKDcbz56uja5nVdR504umCW6X1c3/ZUHj
+    q46e6kI/4mXjl5tMM0sYmPXclCsUPUtmZh89wYtd7y9UMQJaMRX7Nb5DaKlUsnOB
+    kk5CLyMoMJ7JTFe7ImpQrQY3RJBQ14bHNzfZ0XycAGRjtBgGr7RHkO7R1Z+7cpC+
+    /17IcVV0S8VGM7KqdwKXxAj2eRwBceQtPzSI9Nspz79PpCJt7ncRqFCqGkt/8txk
+    NmyTxr+m6ZPZ+SIB1HDVs4WOAzm2k4jt7r1xmHq0adifjBfcEs7QCxy/uKoBUTIy
+    jCLS+L94HqXjiOQbTevYeTCIeHpPHTnBZmU/xqYL3qdQP5NoGug5OSmq4O50JPfW
+    Unn0g3+NKPr/ijNv3ywHFFE36QCP0IZ1PGObtNAZ06x2T9TuUOHztgsAqF0ddgLi
+    Hj8BIWcktuhHBJEvJtNeR3vZwt9L+9E8xk1I2hrXqenUdIdwCykCAwEAAaNQME4w
+    HQYDVR0OBBYEFP+diLnUc3rddol5Pq/26Mf8gTOsMB8GA1UdIwQYMBaAFP+diLnU
+    c3rddol5Pq/26Mf8gTOsMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQENBQADggIB
+    AH0DaSRelBhOnKGh001Kh3E1zzEyCw77J94h3qDfokf4O4hlZ4u3Ols93ZUBuBoR
+    3nitIzGQNEJyYpif5pr2XRTz4HdVxL935xXJbQJZawLNIhZ0oemqnhMMfhnhb7G0
+    /WSyF1DxC/by4U6kiGGtkas0KO39wwgWfNED++DmIO6RIW2wsxNJHMcqAVG0o1ki
+    Xn5h7DCnvyMwr/zjgaSDqCTZFWAhtStg6j76BYblP530QFSyBgdFveGT/ERgMzDQ
+    6gA3jldobCi5lF5zxAUOcc3euwreEdKJo1MrhOWpIaFEmlpxkmmKAA3RiWgIU//9
+    dBq1aZIpakvLrMP+334NbBSI6yHCk+JvHc8XtFA9PBqRJxlpCO6KWqKTYMTeTDV4
+    VcIgKvl+MVxX+AfukL1dH8NcyZPgzzRmV3ChzjVt/nsS7hwYpZnH6TmSCNrP3+bp
+    EvqRue0VdGcw54frrKvekU4Y44iqrzWp9aLHNO/pceEi5wnWtQrzsX8/uhiX/kYO
+    Lpeh06jrR9C0maoJNzLp4izu7IjqyQcVw+Kc9AM20VhUw8AKPYl1yZzGC7/2OiIG
+    PkT5T6dXES/3qPh6WXnq6Edj48lOWPiX13HPQ4E9y1b8TrwzAXnc/jE+YXuJoi77
+    JTD1NnMJVsHh8OQBWju3y4eq0rdZk7+NSzuynzfeRWkD
     -----END CERTIFICATE-----
 
 kind: ConfigMap
@@ -10,9 +40,7 @@ metadata:
   name: trusted-ca-cm
   namespace: default
 
-
 ---
-
 apiVersion: v1
 data:
     build-ca.sh: "#!/usr/bin/env bash \nset -euxo pipefail\ntdnf update \ntdnf install -y ca-certificates\ntdnf install -y openssl-c_rehash\necho \"$TRUSTED_CERT\" > /etc/ssl/certs/my-trusted-cert.pem\n/usr/bin/rehash_ca_certificates.sh\ncurl -vv https://harbor.net\n"

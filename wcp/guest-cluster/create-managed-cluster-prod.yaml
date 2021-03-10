@@ -1,17 +1,17 @@
 apiVersion: run.tanzu.vmware.com/v1alpha1
 kind: TanzuKubernetesCluster
 metadata:
-  name: dev-cluster-1
-  namespace: dev
+  name: prod-cluster-1
+  namespace: prod 
 spec:
  topology:
    controlPlane:
-     count: 1 
-     class: guaranteed-small
+     count: 3
+     class: guaranteed-medium
      storageClass: tanzu-storage-policy
    workers:
-     count: 3
-     class: guaranteed-small
+     count: 5
+     class: guaranteed-medium
      storageClass: tanzu-storage-policy 
  distribution:
    version: v1.18
@@ -20,6 +20,6 @@ spec:
       cni:
         name: antrea  #But could be left blank if using the default
       services:
-        cidrBlocks: ["10.99.0.0/16"]
-      pods:
         cidrBlocks: ["10.98.0.0/16"]
+      pods:
+        cidrBlocks: ["10.91.0.0/16"]

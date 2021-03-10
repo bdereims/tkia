@@ -3,9 +3,9 @@
 # Change these as per requirement
 # The script needs to run under the context of the supervisor cluster
 # Pre-req jq, kubectl
-export NAMESPACE=tkg-service
-export TKGSCLUSTER=dev-cluster
-export COMMAND="sudo uname -an"
+export NAMESPACE=dev
+export TKGSCLUSTER=dev-cluster-1
+export COMMAND="sudo systemctl restart containerd"
 
 ##################################
 export VDS=`kubectl get deploy -n vmware-system-lbapi vmware-system-lbapi-lbapi-controller-manager --no-headers 2>/dev/null |wc -l`
@@ -53,7 +53,7 @@ do
   then
         kubectl -n ${NAMESPACE} exec -it jumpbox -- /usr/bin/ssh -o StrictHostKeyChecking=no vmware-system-user@$ip ${COMMAND}
   else
-        kubectl get secret -n demo1 workload-vsphere-tkg1-ssh -o json |jq -r '.data."ssh-privatekey"'|base64 -d > ~/.ssh/id_rsa
+        kubectl get secret -n ${NAMESPACE} ${TKGSCLUSTER}-ssh -o json |jq -r '.data."ssh-privatekey"'|base64 -d > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh -o StrictHostKeyChecking=no vmware-system-user@$ip ${COMMAND}
   fi
