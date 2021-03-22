@@ -1,5 +1,5 @@
-export DOMAIN=vmware.local
-export SUPERVISOR=supervisor.${DOMAIN}
+export DOMAIN=cpod-vcf.az-fkd.cloud-garage.net
+export SUPERVISOR=api.${DOMAIN}
 export TANZU_USER=administrator@vsphere.local
 
 . ./password

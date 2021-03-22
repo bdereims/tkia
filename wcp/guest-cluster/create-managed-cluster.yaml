@@ -1,25 +1,28 @@
 apiVersion: run.tanzu.vmware.com/v1alpha1
 kind: TanzuKubernetesCluster
 metadata:
-  name: dev-cluster-1
-  namespace: dev
+  name: acme  
+  namespace: kubeclusters 
 spec:
  topology:
    controlPlane:
-     count: 1 
-     class: guaranteed-small
-     storageClass: tanzu-storage-policy
+     count: 3 
+     class: best-effort-small
+     storageClass: vsan-default-storage-policy 
    workers:
-     count: 3
-     class: guaranteed-small
-     storageClass: tanzu-storage-policy 
+     count: 4
+     class: best-effort-small
+     storageClass: vsan-default-storage-policy
  distribution:
-   version: v1.18
+   version: v1.18.15+vmware.1-tkg.1.600e412
  settings:
-    network:
-      cni:
-        name: antrea  #But could be left blank if using the default
-      services:
-        cidrBlocks: ["10.99.0.0/16"]
-      pods:
-        cidrBlocks: ["10.98.0.0/16"]
+   network:
+     cni:
+       name: antrea  #But could be left blank if using the default
+     services:
+       cidrBlocks: ["10.99.0.0/16"]
+     pods:
+       cidrBlocks: ["10.98.0.0/16"]
+     storage:
+       defaultClass: vsan-default-storage-policy
+
