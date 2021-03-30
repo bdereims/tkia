@@ -18,3 +18,5 @@ kubectl -n ${MONITORING_NS} path svc grafana -p '{"spec":{"type": "LoadBalancer"
 echo "Add to Grafana this prometheus datasource: http://prometheus-kube-prometheus-prometheus.${MONITORING_NS}.svc.cluster.local:9090"
 echo "Grafana at: http://$(kubectl -n ${MONITORING_NS} get svc grafana -o json | jq -r '[.status.loadBalancer.ingress[].ip,.spec.ports[].port] | "\(.[0]):\(.[1])"')"
 echo "Grafana Password: $(kubectl get secret grafana-admin --namespace ${MONITORING_NS} -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode)"
+
+../../tips/pacth-svc-lb.sh monitoring grafana

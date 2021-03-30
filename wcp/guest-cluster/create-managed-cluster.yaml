@@ -2,7 +2,7 @@ apiVersion: run.tanzu.vmware.com/v1alpha1
 kind: TanzuKubernetesCluster
 metadata:
   name: acme  
-  namespace: kubeclusters 
+  namespace: tkgs 
 spec:
  topology:
    controlPlane:
@@ -14,7 +14,7 @@ spec:
      class: best-effort-small
      storageClass: vsan-default-storage-policy
  distribution:
-   version: v1.18.15+vmware.1-tkg.1.600e412
+   version: v1.19
  settings:
    network:
      cni:
@@ -23,6 +23,5 @@ spec:
        cidrBlocks: ["10.99.0.0/16"]
      pods:
        cidrBlocks: ["10.98.0.0/16"]
-     storage:
-       defaultClass: vsan-default-storage-policy
-
+   storage:
+     defaultClass: vsan-default-storage-policy

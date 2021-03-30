@@ -1,4 +1,5 @@
 #!/bin/bash
+#bdereims@vmware.com
 
 helm repo add bitnami https://charts.bitnami.com/bitnami
 kubectl create namespace kubeapps
