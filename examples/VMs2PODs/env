@@ -1,0 +1,5 @@
+export FQDN=harbor.cpod-services.az-fkd.cloud-garage.net
+export LIBRARY=${FQDN}/acme
+export NAMESPACE="acme"
+### PASSWORD='VMware1!'
+export PASSWORD="Vk13YXJlMSE="

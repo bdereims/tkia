@@ -1,0 +1,192 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+  namespace: ${NAMESPACE}
+type: Opaque
+data:
+  password: Vk13YXJlMSE=
+  user: Ym9i 
+  host: YWNtZS1kYXRhYmFzZS5jcG9kLXZjZi5hei1ma2QuY2xvdWQtZ2FyYWdlLm5ldA== 
+  database: YWNtZQ== 
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: php-fpm 
+  namespace: ${NAMESPACE}
+automountServiceAccountToken: true
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-fpm-deployment
+  namespace: ${NAMESPACE}
+  labels:
+    app: php-fpm
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: php-fpm
+  template:
+    metadata:
+      labels:
+        app: php-fpm
+    spec:
+      containers:
+      - name: php-fpm
+        image: ${LIBRARY}/acme-php-fpm
+        resources:
+          limits:
+            cpu: 200m 
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+          - name: MARIADB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: password
+          - name: MARIADB_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: user
+          - name: MARIADB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: host 
+          - name: MARIADB_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: database 
+        ports:
+        - containerPort: 9000
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: php-fpm-service
+  namespace: ${NAMESPACE} 
+spec:
+  type: ClusterIP
+  ports:
+  - name: php-fpm 
+    port: 9000 
+    protocol: TCP
+    targetPort: 9000 
+  selector:
+    app: php-fpm 
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nginx
+  namespace: ${NAMESPACE}
+automountServiceAccountToken: true
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: ${NAMESPACE} 
+  labels:
+    app: nginx
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: ${LIBRARY}/acme-nginx:latest 
+        resources:
+          limits:
+            cpu: 200m 
+            memory: 500Mi
+          requests:
+            cpu: 100m 
+            memory: 100Mi
+        env:
+          - name: MARIADB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: password
+          - name: MARIADB_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: user
+          - name: MARIADB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: mysecret
+                key: host 
+        ports:
+        - containerPort: 80
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service
+  namespace: ${NAMESPACE} 
+spec:
+  type: LoadBalancer 
+  ports:
+  - name: nginx 
+    port: 80 
+    protocol: TCP
+    targetPort: 80 
+  selector:
+    app: nginx 
+    
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx-deployment
+  namespace: ${NAMESPACE} 
+spec:
+  maxReplicas: 10
+  minReplicas: 1 
+  scaleTargetRef:
+    apiVersion: apps/v1 
+    kind: Deployment
+    name: nginx-deployment
+  targetCPUUtilizationPercentage: 20 
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-fpm-deployment
+  namespace: ${NAMESPACE} 
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: php-fpm-deployment
+  targetCPUUtilizationPercentage: 20 
