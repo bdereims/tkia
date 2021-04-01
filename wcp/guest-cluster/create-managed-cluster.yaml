@@ -11,7 +11,7 @@ spec:
      storageClass: vsan-default-storage-policy 
    workers:
      count: 4
-     class: best-effort-small
+     class: best-effort-medium
      storageClass: vsan-default-storage-policy
  distribution:
    version: v1.19

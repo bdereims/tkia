@@ -41,6 +41,7 @@ subjectAltName = @alt_names
 [alt_names]
 DNS.1=${DOMAIN}
 DNS.2=harbor
+DNS.3=harbor.${DOMAIN}
 EOF
 
 openssl x509 -req -sha512 -days 3650 \

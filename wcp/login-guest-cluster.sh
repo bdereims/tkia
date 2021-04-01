@@ -5,6 +5,8 @@
 
 . ../env
 
+export KUBECTL_VSPHERE_PASSWORD=${PASSWORD}
+
 [ "$1" == "" -o "$2" == "" ] && printf "\nIt needs to provide <Cluster_Namespace> and <Cluster_Name>.\n\n" && exit 1
 
 echo ${TANZU_PASSWORD}
