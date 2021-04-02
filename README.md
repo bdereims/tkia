@@ -7,7 +7,10 @@
 Brice  
   
 ---
-  
+
+[What is Tanzu? What does it stand for? What are Tanzu differentiators for your business agility?](https://www.youtube.com/watch?v=3LkmlMWhdj0&ab_channel=VMwareTanzu)
+
+---
 
 ## Training and 101
 - [Kube Academy](https://kube.academy/) is a bunch of good lessons about k8s
