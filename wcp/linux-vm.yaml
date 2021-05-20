@@ -1,0 +1,13 @@
+apiVersion: vmoperator.vmware.com/v1alpha1
+kind: VirtualMachine
+metadata:
+  name: linux-vm
+  namespace: vms 
+spec:
+  imageName: vmservice-ubuntu-20-10-server-cloudimg-amd64
+  className: best-effort-small 
+  powerState: poweredOn
+  storageClass: tanzu 
+  networkInterfaces:
+  - networkName: "primary"
+    networkType: vsphere-distributed

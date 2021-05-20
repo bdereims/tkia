@@ -1,0 +1,14 @@
+#cloud-config
+users:
+  - default
+  - name: vmware
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: false
+    passwd: 'VMware1!'
+    shell: /bin/bash
+ssh_pwauth: true
+ 
+write_files:
+  - content: |
+      VMSVC Says Hello World!
+    path: /home/vmware/helloworld

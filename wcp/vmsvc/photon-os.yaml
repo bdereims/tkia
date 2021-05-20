@@ -1,0 +1,49 @@
+apiVersion: vmoperator.vmware.com/v1alpha1
+kind: VirtualMachine
+metadata:
+  labels:
+    myvms: vmsvc
+  name: photonos 
+  namespace: vms 
+  annotations:
+    vmoperator.vmware.com/image-supported-check: disable
+spec:
+  imageName: photon-hw11-4.0-1526e30ba0
+  className: best-effort-small
+  powerState: poweredOn
+  storageClass: tanzu 
+  networkInterfaces:
+  - networkName: "workload"
+    networkType: vsphere-distributed
+  vmMetadata:
+    configMapName: photonos-cm 
+    transport: OvfEnv
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: photonos-cm 
+    namespace: vms
+data:
+  user-data: I2Nsb3VkLWNvbmZpZwp1c2VyczoKICAtIGRlZmF1bHQKICAtIG5hbWU6IHZtd2FyZQogICAgc3VkbzogQUxMPShBTEwpIE5PUEFTU1dEOkFMTAogICAgbG9ja19wYXNzd2Q6IGZhbHNlCiAgICBwYXNzd2Q6ICdWTXdhcmUxIScKICAgIHNoZWxsOiAvYmluL2Jhc2gKc3NoX3B3YXV0aDogdHJ1ZQogCndyaXRlX2ZpbGVzOgogIC0gY29udGVudDogfAogICAgICBWTVNWQyBTYXlzIEhlbGxvIFdvcmxkIQogICAgcGF0aDogL2hvbWUvdm13YXJlL2hlbGxvd29ybGQK
+
+---
+apiVersion: vmoperator.vmware.com/v1alpha1
+kind: VirtualMachineService
+metadata:
+  name: photonos-svc
+  namespace: vms 
+spec:
+  ports:
+  - name: ssh
+    port: 22
+    protocol: TCP
+    targetPort: 22
+  - name: web
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    myvms: vmsvc
+  type: LoadBalancer

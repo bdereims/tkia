@@ -1,0 +1,32 @@
+#cloud-config
+users:
+  - default
+  - name: vmware
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: false
+    passwd: '$6$LN/YlVY2$V8gx2WVvdyVg6ZrH6qr.wyz3ZB42XhSUl6th7PXp9TyCjJRDv3HEhNjDbamW.HM422ExkY8knu1k7xa.Kpx/E0'
+    shell: /bin/bash
+ssh_pwauth: true
+
+ssh_authorized_keys:
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCo27SwDa8LQjWuFn+qdryZnyNvgEX3IzsIIZ1MueABKVCntr7EZHpFgbpeayt9HoYPKrQjGo+YO/6vpr/yAw9g2Lseb7MIE/isN9av3hzYr/fBOC38Qr7ba9Jt7WBJRh/HkjMZryMsECZdsNvO6cx1BFBXktAJmTfcj4UA8F0i2/JEaJbkPptIGGVB140njF1+REU1C4qG8yzKWvMaWoK2yVwdwaZ1qxEfhJFRKKlDqcrpPfqUpCWEkqv5sD3flPw7zvEU9nh1RXdtfq43La9KWWtUEqH9aXRUKtrgh8RKRq2YpRLvxjEpNuMEGaT+913UyOb5LGGJ2a5LNr+i5ONd vmware@forty-tw
+ 
+write_files:
+  - content: |
+      VMSVC Says Hello World
+    path: /home/vmware/helloworld
+ 
+apt:
+  sources:
+    docker.list:
+      source: deb [arch=amd64] https://download.docker.com/linux/ubuntu $RELEASE stable
+      keyid: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+ 
+package_update: true
+ 
+packages:
+  - docker-ce
+  - docker-ce-cli
+ 
+runcmd:
+  - sudo docker run --name nginx -p 80:80 -d harbor.tanzuworld.com/openso/nginx

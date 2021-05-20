@@ -6,15 +6,15 @@ metadata:
 spec:
  topology:
    controlPlane:
-     count: 3 
+     count: 1 
      class: best-effort-small
-     storageClass: vsan-default-storage-policy 
+     storageClass: tanzu 
    workers:
-     count: 4
-     class: best-effort-medium
-     storageClass: vsan-default-storage-policy
+     count: 1 
+     class: best-effort-small
+     storageClass: tanzu
  distribution:
-   version: v1.19
+   version: v1.20
  settings:
    network:
      cni:
@@ -24,4 +24,4 @@ spec:
      pods:
        cidrBlocks: ["10.98.0.0/16"]
    storage:
-     defaultClass: vsan-default-storage-policy
+     defaultClass: tanzu

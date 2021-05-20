@@ -1,0 +1,50 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: ubuntu-cm 
+    namespace: vms
+data:
+  user-data: I2Nsb3VkLWNvbmZpZwp1c2VyczoKICAtIGRlZmF1bHQKICAtIG5hbWU6IHZtd2FyZQogICAgc3VkbzogQUxMPShBTEwpIE5PUEFTU1dEOkFMTAogICAgbG9ja19wYXNzd2Q6IGZhbHNlCiAgICBwYXNzd2Q6ICckNiRMTi9ZbFZZMiRWOGd4MldWdmR5Vmc2WnJINnFyLnd5ejNaQjQyWGhTVWw2dGg3UFhwOVR5Q2pKUkR2M0hFaE5qRGJhbVcuSE00MjJFeGtZOGtudTFrN3hhLktweC9FMCcKICAgIHNoZWxsOiAvYmluL2Jhc2gKc3NoX3B3YXV0aDogdHJ1ZQoKc3NoX2F1dGhvcml6ZWRfa2V5czoKICAtIHNzaC1yc2EgQUFBQUIzTnphQzF5YzJFQUFBQURBUUFCQUFBQkFRQ28yN1N3RGE4TFFqV3VGbitxZHJ5Wm55TnZnRVgzSXpzSUlaMU11ZUFCS1ZDbnRyN0VaSHBGZ2JwZWF5dDlIb1lQS3JRakdvK1lPLzZ2cHIveUF3OWcyTHNlYjdNSUUvaXNOOWF2M2h6WXIvZkJPQzM4UXI3YmE5SnQ3V0JKUmgvSGtqTVpyeU1zRUNaZHNOdk82Y3gxQkZCWGt0QUptVGZjajRVQThGMGkyL0pFYUpia1BwdElHR1ZCMTQwbmpGMStSRVUxQzRxRzh5ektXdk1hV29LMnlWd2R3YVoxcXhFZmhKRlJLS2xEcWNycFBmcVVwQ1dFa3F2NXNEM2ZsUHc3enZFVTluaDFSWGR0ZnE0M0xhOUtXV3RVRXFIOWFYUlVLdHJnaDhSS1JxMllwUkx2eGpFcE51TUVHYVQrOTEzVXlPYjVMR0dKMmE1TE5yK2k1T05kIHZtd2FyZUBmb3J0eS10dwogCndyaXRlX2ZpbGVzOgogIC0gY29udGVudDogfAogICAgICBWTVNWQyBTYXlzIEhlbGxvIFdvcmxkCiAgICBwYXRoOiAvaG9tZS92bXdhcmUvaGVsbG93b3JsZAogCmFwdDoKICBzb3VyY2VzOgogICAgZG9ja2VyLmxpc3Q6CiAgICAgIHNvdXJjZTogZGViIFthcmNoPWFtZDY0XSBodHRwczovL2Rvd25sb2FkLmRvY2tlci5jb20vbGludXgvdWJ1bnR1ICRSRUxFQVNFIHN0YWJsZQogICAgICBrZXlpZDogOURDODU4MjI5RkM3REQzODg1NEFFMkQ4OEQ4MTgwM0MwRUJGQ0Q4OAogCnBhY2thZ2VfdXBkYXRlOiB0cnVlCiAKcGFja2FnZXM6CiAgLSBkb2NrZXItY2UKICAtIGRvY2tlci1jZS1jbGkKIApydW5jbWQ6CiAgLSBzdWRvIGRvY2tlciBydW4gLS1uYW1lIG5naW54IC1wIDgwOjgwIC1kIGhhcmJvci50YW56dXdvcmxkLmNvbS9vcGVuc28vbmdpbngK
+
+---
+apiVersion: vmoperator.vmware.com/v1alpha1
+kind: VirtualMachine
+metadata:
+  labels:
+    myvms: vmsvc
+  name: ubuntu 
+  namespace: vms 
+  annotations:
+    vmoperator.vmware.com/image-supported-check: disable
+spec:
+  imageName: ubuntu-20-1621373774638
+  className: best-effort-small
+  powerState: poweredOn
+  storageClass: tanzu 
+  networkInterfaces:
+  - networkName: "workload"
+    networkType: vsphere-distributed
+  vmMetadata:
+    configMapName: ubuntu-cm 
+    transport: OvfEnv
+
+---
+apiVersion: vmoperator.vmware.com/v1alpha1
+kind: VirtualMachineService
+metadata:
+  name: ubuntu-svc
+  namespace: vms 
+spec:
+  ports:
+  - name: ssh
+    port: 22
+    protocol: TCP
+    targetPort: 22
+  - name: web
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    myvms: vmsvc
+  type: LoadBalancer
