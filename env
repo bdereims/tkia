@@ -1,5 +1,5 @@
-export DOMAIN=cpod-airgapped.az-fkd.cloud-garage.net
-export SUPERVISOR=api.${DOMAIN}
+export DOMAIN=cpod-agtzu.az-fkd.cloud-garage.net
+export SUPERVISOR=supervisor.${DOMAIN}
 export TANZU_USER=administrator@${DOMAIN}
 
 . ./password
