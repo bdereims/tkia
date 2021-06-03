@@ -1,5 +1,20 @@
+### Common
+export TKIA_DIR=~/tkia
 export DOMAIN=cpod-agtzu.az-fkd.cloud-garage.net
+. ${TKIA_DIR}/password
+
+### TKGs
 export SUPERVISOR=supervisor.${DOMAIN}
 export TANZU_USER=administrator@${DOMAIN}
 
-. ./password
+### TKGm
+export GOVC_USERNAME=administrator@${DOMAIN}
+export GOVC_PASSWORD=${PASSWORD}
+export GOVC_URL=vcsa.${DOMAIN}
+export GOVC_INSECURE=1
+export GOVC_DATACENTER="cPod-AGTZU"
+export GOVC_DATASTORE=nfsDatastore
+export GOVC_NETWORK='Management'
+export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/Cluster/Resources/TKG"
+export BITS=~
+export TKG_DIR=TKG
