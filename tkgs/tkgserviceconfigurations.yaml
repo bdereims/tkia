@@ -1,0 +1,54 @@
+apiVersion: run.tanzu.vmware.com/v1alpha1
+kind: TkgServiceConfiguration
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"run.tanzu.vmware.com/v1alpha1","kind":"TkgServiceConfiguration","metadata":{"annotations":{},"name":"tkg-service-configuration"},"spec":{"defaultCNI":"antrea"}}
+  creationTimestamp: "2021-06-12T07:08:16Z"
+  generation: 3
+  managedFields:
+  - apiVersion: run.tanzu.vmware.com/v1alpha1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+      f:spec:
+        .: {}
+        f:defaultCNI: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2021-06-12T07:08:16Z"
+  - apiVersion: run.tanzu.vmware.com/v1alpha1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:proxy:
+          .: {}
+          f:httpProxy: {}
+          f:httpsProxy: {}
+          f:noProxy: {}
+        f:trust:
+          .: {}
+          f:additionalTrustedCAs: {}
+    manager: kubectl-edit
+    operation: Update
+    time: "2021-06-16T07:53:31Z"
+  name: tkg-service-configuration
+  resourceVersion: "3157653"
+  selfLink: /apis/run.tanzu.vmware.com/v1alpha1/tkgserviceconfigurations/tkg-service-configuration
+  uid: 7986102a-8d4f-429d-bdd0-e8e5029520ed
+spec:
+  defaultCNI: antrea
+  proxy:
+    httpProxy: http://172.17.20.1:3128
+    httpsProxy: http://172.17.20.1:3128
+    noProxy:
+    - 192.168.0.0/16
+    - 172.16.0.0/12
+    - 10.0.0.0/8
+  trust:
+    additionalTrustedCAs:
+    - data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUYrVENDQStHZ0F3SUJBZ0lVRE9XV2JWbVROdEFVN3ZGajVMOXQ5YWlEUjRVd0RRWUpLb1pJaHZjTkFRRU4KQlFBd2dZc3hDekFKQmdOVkJBWVRBa1pTTVE0d0RBWURWUVFJREFWUVlYSnBjekVPTUF3R0ExVUVCd3dGVUdGeQphWE14RlRBVEJnTlZCQW9NREdOc2IzVmtMV2RoY21GblpURVJNQThHQTFVRUN3d0ljMlZ5ZG1salpYTXhNakF3CkJnTlZCQU1NS1doaGNtSnZjaTVqY0c5a0xXRm5kSHAxTG1GNkxXWnJaQzVqYkc5MVpDMW5ZWEpoWjJVdWJtVjAKTUI0WERUSXhNRFV5T0RJeE16STBNVm9YRFRNeE1EVXlOakl4TXpJME1Wb3dnWXN4Q3pBSkJnTlZCQVlUQWtaUwpNUTR3REFZRFZRUUlEQVZRWVhKcGN6RU9NQXdHQTFVRUJ3d0ZVR0Z5YVhNeEZUQVRCZ05WQkFvTURHTnNiM1ZrCkxXZGhjbUZuWlRFUk1BOEdBMVVFQ3d3SWMyVnlkbWxqWlhNeE1qQXdCZ05WQkFNTUtXaGhjbUp2Y2k1amNHOWsKTFdGbmRIcDFMbUY2TFdaclpDNWpiRzkxWkMxbllYSmhaMlV1Ym1WME1JSUNJakFOQmdrcWhraUc5dzBCQVFFRgpBQU9DQWc4QU1JSUNDZ0tDQWdFQTNhRVp6ZHB6bGpMWVB5eTJIL21abThCcHNSUEJXL3hEL0pSUXVzZUhDQnZNCjBGYkpkaFFhRlkrMUoxUEZJeVdtL2swTnZZQWUvd0VRbUdIU1gyeGpoTUIzWUgybVFpRHU0SDJVaHdrdU1heVcKNk4vanp6MmtQeFFhTWc3c2Vnd0xGYmdrOEVNN0FWMjVXbmRQVVZ3cGNmaEN0Z3RaTEcvWnRSN2hQZ1JtWm1lWAoydHBBREIyTFU2Skl1SkNGa3djVTRzbWlRMU93dFF3YlBmRG4xNytlNS94ZWsxVUFlVnJzZEJUWDMvTUF2eXJZClNPK1hpZlI5TnNpeEpmMWxYYVVGQ1JMSVBFUkhuaDc3T2V1ZmxERm9nT21kMndwekFVVS8zY2FteDhQejZMUkEKRERrdXNCNFFVWlpkUlBJcVYvRS9CSGVCKytVTHFVUUkyVDR5bW5tdm9aMzNoMWV2UUxCRFdUMFU0Ynl3MDBENwpjSG83aXA2cGdCZVlEaGUyL0xIR3owa1lQS1F5dm05VzFpWHJ0YTY4dmNaazEzNzhVdlJHMHlDbUFQZHpOUTlnClVTbW5EUEszcVRZelBKOC9LVHpreUc3OUpRMlVnR0VlM21uWnl4VnhNOUkyMGJUaHlyaWlyd08rTlpoQ090b2YKdjlkSWlkbDFRa2Vsd2tOUTluanlxQjJUVDBuelBkd3E0OTAxQ3U2citad0hneEU3YnN3NUpzSFNRaWdWTUhWQQpGUS9PSlBzTDZaR1F3TnA4NUtvQTFtaHVQbG0rSnNoQXYrTDRvRVJmNHhmZ1NHekVHMDk3alBNeHp5eDhzNE5kCkIvSUhTUjVaOWFpdjFNcER6MFJsQmpXcnJWSEc0SHFKa0NJVEduVURZaEJieUJ1MUpsOTlubW9mdUVBeTJ6VUMKQXdFQUFhTlRNRkV3SFFZRFZSME9CQllFRkxqQkczR0VSSC92bnVSKzFjR0xWUGw5M1lJNk1COEdBMVVkSXdRWQpNQmFBRkxqQkczR0VSSC92bnVSKzFjR0xWUGw5M1lJNk1BOEdBMVVkRXdFQi93UUZNQU1CQWY4d0RRWUpLb1pJCmh2Y05BUUVOQlFBRGdnSUJBRVl5K1MwUnNyaG83VENQMFE2MW1nK1RvSXJESEVJQ0xEV1lpVHBYcm4vLzU4UWcKVXcyNFlEWkVSOVdVZWhsbFVZc3VKL04rNmkraXV2Yk1oTkxHdnRHbml4TDQwUW03M0N6NklFd3JhN1N6cVpGSgpXNG1BVUNLY09EQ05mOEI0b0MraVdTZXFxVERqcXVxblFGK1dXQkF5Qis4YmZOODlxOTRIbWE3QUdKY25wNWlSCm5JQ3Y1ektzL3Zybk01UzE5MkRlQ2dmK1lyeklVR1c4SGdWTTE4cHBjRDB1cjN4MlRUWFVYcmtYUlI0dzVBQk4Kakh3bEVtRyszaDJiRGI3cU1DcXVaOUdra0l1WGdnZGozTzVvTThRVm1oSGVyUnBNMWlOWFJzMG11ekljYmtzMQozb3VuNnZZRGtoTWZEQlRicGsvN0dPNCtuT09wTS9NQ1FKeTVQQ0pHM3g5d1R2WFNxODRTR0hpbXI3Z292SkNPCmtYQ1YxUDBZZ3VhWlFRSmkrNjVrcWttWkxuYXNDakllOCtpSVhXS2tKejJ4SWJSZGFxdnhWSk5sY1AzVk5ETjcKV1NZQ0VOMER4MUVUVy9BYm9HZmkvSTNRWTczcm5TMElHNTM5c29GRUQxTnFtQ3MrVW9zdERsTXJ3ZFRRd204RAoxdTJXYWVTYmNFQ2d3bTlZWTRnNkhtK2ZLTGJtK2tiTnhtdUhnNGFBOTRSWHhWaEpzQndvaCt4TU4vVExTK0VJClRiRC9HbDBjbVJVa1V5cDBZQm45K3d1VUU1aFJUNFgrdU9GR0FJakEwQkl6UjRhU1FZWmd6QmUwNmpRMU12eWkKZlBGazhqczlqNVM5anhPNjBObnAwTWNraHhIZ3ZMaHEvd0k5ZC85YmxoQ1pBUjdlWVcvVmRjMlA0UXJ0Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+      name: harbor

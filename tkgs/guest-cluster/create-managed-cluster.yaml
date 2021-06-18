@@ -7,11 +7,11 @@ spec:
  topology:
    controlPlane:
      count: 1 
-     class: best-effort-large
+     class: best-effort-medium
      storageClass: tanzu 
    workers:
-     count: 1 
-     class: best-effort-large
+     count: 3 
+     class: best-effort-medium
      storageClass: tanzu
  distribution:
    version: v1.20
