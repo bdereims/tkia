@@ -9,7 +9,17 @@
 #fi
 
 #kubectl create namespace ${NAMESPACE}
-./kubectl_apply.sh back-end.yaml
-./kubectl_apply.sh front-end.yaml
+
+#YAMLS="secret.yaml back-end.yaml front-end.yaml"
+YAMLS="secret.yaml front-end.yaml"
+
+for FILE in ${YAMLS} ; do
+	echo "--- Applying ${FILE}"
+	./kubectl_apply.sh ${FILE}
+done
+
+#./kubectl_apply.sh secret.yaml 
+#./kubectl_apply.sh back-end.yaml
+#./kubectl_apply.sh front-end.yaml
 
 exit 0

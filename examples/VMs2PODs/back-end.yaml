@@ -1,12 +1,3 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mysecret
-  namespace: ${NAMESPACE} 
-type: Opaque
-data:
-  password: ${PASSWORD} 
-
 ---
 apiVersion: v1
 kind: Pod
@@ -18,7 +9,7 @@ metadata:
 spec:
   containers:
   - name: mariadb
-    image: mariadb/server:10.1.37
+    image: mariadb/server
     resources:
       limits:
         cpu: 10m
@@ -39,7 +30,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mariadb-service-lb
+  name: mariadb-service
   namespace: ${NAMESPACE} 
 spec:
   type: LoadBalancer 

@@ -21,9 +21,6 @@ echo gethostname();
 </p><br>
 
 <?php
-//$hostname = "acme-database.service.acme-hcp-consul.consul";
-//$hostname = "127.0.0.1";
-//$hostname = "acme-database.cpod-vcf.az-fkd.cloud-garage.net";
 $hostname = getenv("MARIADB_HOST");
 $username = getenv("MARIADB_USER");
 $password = getenv("MARIADB_PASSWORD");
@@ -32,7 +29,7 @@ echo "<p>BD -=> ".$username."@".$hostname.":".$db."</p>";
 
 $dbconnect=mysqli_connect($hostname,$username,$password,$db);
 
-$result = $dbconnect->query("select * from items");
+$result = $dbconnect->query("select * from web");
 
 echo "<table style=\"width:100%\"><tr><th>Name</th><th>Description</th></tr>";
 

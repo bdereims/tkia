@@ -8,13 +8,16 @@ export SUPERVISOR=supervisor.${DOMAIN}
 export TANZU_USER=administrator@${DOMAIN}
 
 ### TKGm
-export GOVC_USERNAME=administrator@${DOMAIN}
-export GOVC_PASSWORD=${PASSWORD}
-export GOVC_URL=vcsa.${DOMAIN}
+export GOVC_USERNAME='cloudadmin@vmc.local'
+export GOVC_PASSWORD='A*fUOZTyBi7im-5'
+#export GOVC_URL=vcenter.sddc-34-202-46-89.vmwarevmc.com
+export GOVC_URL=vcenter
 export GOVC_INSECURE=1
-export GOVC_DATACENTER="cPod-AGTZU"
-export GOVC_DATASTORE=nfsDatastore
-export GOVC_NETWORK='Management'
-export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/Cluster/Resources/TKG"
-export BITS=~
+export GOVC_DATACENTER="SDDC-Datacenter"
+export GOVC_CLUSTER="Cluster-1"
+export GOVC_DATASTORE=vsanDatastore
+export GOVC_NETWORK="sddc-cgw-network-1"
+export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/${GOVC_CLUSTER}/Resources/Compute-ResourcePool"
+export BITS=/home/grease-monkey
 export TKG_DIR=TKG
+export ALBPASSWD='3!Ioh!!0RAW0'

@@ -1,5 +1,19 @@
+encode() {
+	printf "${1}" | base64
+}
+
 export FQDN=harbor.cpod-services.az-fkd.cloud-garage.net
-export LIBRARY=${FQDN}/acme
+#export LIBRARY=${FQDN}/acme
+export LIBRARY=bdereims
 export NAMESPACE="acme"
 ### PASSWORD='VMware1!'
 export PASSWORD="Vk13YXJlMSE="
+DB_USER=$(encode root)
+export DB_USER
+DB_PASSWORD=$(encode 'VMware1!')
+export DB_PASSWORD
+#DB_HOST=$(encode 192.168.1.165)
+DB_HOST=$(encode mariadb-service)
+export DB_HOST
+DB_DATABASE=$(encode nginx)
+export DB_DATABASE
