@@ -1,6 +1,7 @@
 ### Common
 export TKIA_DIR=~/tkia
-export DOMAIN=cpod-agtzu.az-fkd.cloud-garage.net
+export DOMAIN=cpod-siemob.az-rbx.cloud-garage.net
+export SUBNET=172.23.6
 . ${TKIA_DIR}/password
 
 ### TKGs
@@ -8,16 +9,23 @@ export SUPERVISOR=supervisor.${DOMAIN}
 export TANZU_USER=administrator@${DOMAIN}
 
 ### TKGm
-export GOVC_USERNAME='cloudadmin@vmc.local'
-export GOVC_PASSWORD='A*fUOZTyBi7im-5'
-#export GOVC_URL=vcenter.sddc-34-202-46-89.vmwarevmc.com
-export GOVC_URL=vcenter
+export GOVC_USERNAME="administrator@${DOMAIN}"
+export GOVC_PASSWORD=${PASSWORD}
+export GOVC_URL=vcsa.${DOMAIN}
 export GOVC_INSECURE=1
-export GOVC_DATACENTER="SDDC-Datacenter"
-export GOVC_CLUSTER="Cluster-1"
+export GOVC_DATACENTER="cPod-SIEMOB"
+export GOVC_CLUSTER="Cluster"
 export GOVC_DATASTORE=vsanDatastore
-export GOVC_NETWORK="sddc-cgw-network-1"
-export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/${GOVC_CLUSTER}/Resources/Compute-ResourcePool"
+export GOVC_NETWORK="VM Network"
+export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/${GOVC_CLUSTER}/Resources/"
 export BITS=/home/grease-monkey
 export TKG_DIR=TKG
-export ALBPASSWD='3!Ioh!!0RAW0'
+export ALBPASSWD=${PASSWORD}
+
+### ALB
+export ALB_CONTROLLER_OVA_FILE=~/controller-20.1.6-9132.ova
+export ALB_CONTROLLER_IP=${SUBNET}.4
+export ALB_CONTROLLER_MASK=255.255.255.0
+export ALB_CONTROLLER_GW=${SUBNET}.1
+export ALB_CONTROLLER_NAME=controller
+export ALB_CONTROLLER_NETWORK="VM Network"

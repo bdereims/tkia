@@ -9,12 +9,14 @@ SHIP_VERSION=0.40.0
 STERN_VERSION=1.11.0
 COMPLETIONS=/etc/bash_completion.d
 
-apt-get -y install curl jq sshpass unzip bash-completion
+apt-get -y install curl jq sshpass unzip bash-completion tmux
 
 curl -L -o /usr/local/bin/docker-compose https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-Linux-x86_64 && chmod +x /usr/local/bin/docker-compose
 
 #curl -L -o /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl && chmod +x /usr/local/bin/kubectl
 #curl -L -o /usr/local/bin/kubectl "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x /usr/local/bin/kubectl
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+install kubectl /usr/bin
 
 curl -L -o /usr/local/bin/stern https://github.com/wercker/stern/releases/download/${STERN_VERSION}/stern_linux_amd64 && chmod +x /usr/local/bin/stern
 
@@ -40,6 +42,10 @@ git clone https://github.com/jonmosco/kube-ps1 \
 && rm -rf kube-ps1
 
 stern --completion bash > $COMPLETIONS/stern.bash
-kubectl completion bash > $COMPLETIONS/kubectl.bash
+#kubectl completion bash > $COMPLETIONS/kubectl.bash
 helm completion bash > $COMPLETIONS/helm.bash
 
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+rm get-docker.sh 
+adduser grease-monkey docker

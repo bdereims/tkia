@@ -1,0 +1,33 @@
+The issue:
+- You want to expose kube api behind DNAT, but the actual api-server conf has no extra SAN and you have to use --insecure-skip-tls-verify option with kubectl
+- Integration with external tools or SaaS does not work with Public IP
+
+Resolution:
+- Add extra SAN to kubeadm conf file and restart api-server
+
+1. generate kubeadm conf file: 'kubectl -n kube-system get configmap kubeadm-config -o jsonpath='{.data.ClusterConfiguration}' > kubeadm.yaml'
+
+2. add extra SAN like:
+--- before
+apiServer:
+  extraArgs:
+--- after
+apiServer:
+  certSANs:
+  - "172.23.6.152"
+  - "poc.cloud-garage.net"
+  - "164.132.217.52"
+  extraArgs:	
+
+3. move existing cert on master node: 'mv /etc/kubernetes/pki/apiserver.{crt,key} ~'
+
+4. copy new kubeadm conf file on master node and reinit kubeadm: 'kubeadm init phase certs apiserver --config kubeadm.yaml'
+
+5. delete api-server pod
+	docker: 
+		'docker ps | grep kube-apiserver | grep -v pause'
+		'docker kill <containerID>'
+	containerd:
+		'crictl pods | grep kube-apiserver | cut -d' ' -f1'
+		'crictl stopp <pod-id>'
+		'crictl rmp <pod-id>'
