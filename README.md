@@ -60,6 +60,7 @@ Brice
 - [Velero & Restic Doc](https://github.com/vmware-tanzu/velero/blob/master/site/docs/master/restic.md)
 - [RWX with vSAN & TKGm](https://laptrinhx.com/tkg-vsan-file-service-for-rwx-read-write-many-volumes-2326549364/)
 - [Walk through – Using vRA to deploy vSphere with Tanzu Namespaces & Guest Clusters](https://veducate.co.uk/vra-deploy-tanzu-clusters/)
+- [A reverse authentication proxy for Kubernetes dashboard hosted in managed VMware Tanzu clusters.](https://github.com/Ouest-France/k8s-dashboard-auth-proxy)
 
 ## Hands on Lab
 HOL are available [here](https://labs.hol.vmware.com)
