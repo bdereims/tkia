@@ -101,4 +101,6 @@ HOL are available [here](https://labs.hol.vmware.com)
 - GitOps and Kubernetes – A Guide for the VI Admin - KUB2306
 - [Tazu Service Mesh @ VMworld](https://blogs.vmware.com/networkvirtualization/2020/09/tanzu-service-mesh-vmworld2020.html/)
 
+## VMworld 2021 Sessions
+- https://hello-tanzu.vmware.com/vmworld2021/ 
 
