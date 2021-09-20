@@ -102,5 +102,5 @@ HOL are available [here](https://labs.hol.vmware.com)
 - [Tazu Service Mesh @ VMworld](https://blogs.vmware.com/networkvirtualization/2020/09/tanzu-service-mesh-vmworld2020.html/)
 
 ## VMworld 2021 Sessions
-- https://hello-tanzu.vmware.com/vmworld2021/ 
+- [All Tanzu Sessions](https://hello-tanzu.vmware.com/vmworld2021)
 
