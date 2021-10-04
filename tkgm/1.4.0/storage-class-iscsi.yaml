@@ -1,0 +1,10 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: iscsi 
+  namespace: kube-system
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: csi.vsphere.vmware.com
+parameters:
+  storagepolicyname: "iSCSI TKG Storage Policy"

@@ -1,31 +1,33 @@
 ### Common
 export TKIA_DIR=~/tkia
-export DOMAIN=cpod-siemob.az-rbx.cloud-garage.net
-export SUBNET=172.23.6
+export DOMAIN=cpod-gpu.az-fkd.cloud-garage.net
+export SUBNET=172.17.17
 . ${TKIA_DIR}/password
+export BITS=/data/BITS
 
 ### TKGs
 export SUPERVISOR=supervisor.${DOMAIN}
 export TANZU_USER=administrator@${DOMAIN}
 
 ### TKGm
-export GOVC_USERNAME="administrator@${DOMAIN}"
+export TKGM_RELEASE="v1.4.0"
+export TKGM_CLI_BUNDLE="tanzu-cli-bundle-linux-amd64"
+export GOVC_USERNAME="administrator@vsphere.local"
 export GOVC_PASSWORD=${PASSWORD}
-export GOVC_URL=vcsa.${DOMAIN}
+export GOVC_URL=vcsa-intel.az-fkd.cloud-garage.net
 export GOVC_INSECURE=1
-export GOVC_DATACENTER="cPod-SIEMOB"
+export GOVC_DATACENTER="Datacenter"
 export GOVC_CLUSTER="Cluster"
-export GOVC_DATASTORE=vsanDatastore
-export GOVC_NETWORK="VM Network"
-export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/${GOVC_CLUSTER}/Resources/"
-export BITS=/home/grease-monkey
+export GOVC_DATASTORE=vsan-intel-datastore
+export GOVC_NETWORK="cpod-gpu"
+export GOVC_RESOURCE_POOL="/${GOVC_DATACENTER}/host/${GOVC_CLUSTER}/Resources"
 export TKG_DIR=TKG
 export ALBPASSWD=${PASSWORD}
 
 ### ALB
-export ALB_CONTROLLER_OVA_FILE=~/controller-20.1.6-9132.ova
+export ALB_CONTROLLER_OVA_FILE=${BITS}/controller-21.1.1-9045.ova
 export ALB_CONTROLLER_IP=${SUBNET}.4
 export ALB_CONTROLLER_MASK=255.255.255.0
 export ALB_CONTROLLER_GW=${SUBNET}.1
-export ALB_CONTROLLER_NAME=controller
-export ALB_CONTROLLER_NETWORK="VM Network"
+export ALB_CONTROLLER_NAME=cPod-GPU-alb-controller
+export ALB_CONTROLLER_NETWORK="cpod-gpu"
