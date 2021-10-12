@@ -8,6 +8,7 @@ KUBECTL_VERSION=1.20.0
 SHIP_VERSION=0.40.0
 STERN_VERSION=1.11.0
 COMPLETIONS=/etc/bash_completion.d
+VMUSER=sixty9
 
 apt-get -y install curl jq sshpass unzip bash-completion tmux
 
@@ -48,4 +49,7 @@ helm completion bash > $COMPLETIONS/helm.bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 rm get-docker.sh 
-adduser grease-monkey docker
+adduser ${VMUSER} docker
+
+# install carvel tools
+curl -L https://carvel.dev/install.sh | bash

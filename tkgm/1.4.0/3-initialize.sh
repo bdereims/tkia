@@ -22,8 +22,9 @@ IP=$( ip a show dev ens192 | grep inet | sed -e "s/^.*inet //" -e "s/\/.*$//" )
 #echo "no_proxy for: ${no_proxy}"
 
 ### If you prefer to setup trough ui
-tanzu management-cluster create --ui --bind ${IP}:8080 --browser none -v 9
-#tanzu management-cluster create --file mgnt-cluster.yaml -v 9
+#tanzu management-cluster create --ui --bind ${IP}:8080 --browser none -v 9
+#tanzu management-cluster create --file mgnt-tkgm.yaml -v 9
+tanzu management-cluster create --file ~/q8kbyy8tn6.yaml -v 9
 
 ### for user auth
 #export TANZU_CLI_PINNIPED_AUTH_LOGIN_SKIP_BROWSER=true

@@ -1,0 +1,8 @@
+harborAdminPassword: "MCMou6qONov!"
+externalURL: "https://harbor.cpod-devready.az-fkd.cloud-garage.net"
+expose:
+  type: loadBalancer
+  tls:
+    certSource: auto
+    auto:
+      commonName: "harbor.cpod-devready.az-fkd.cloud-garage.net" 

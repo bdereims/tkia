@@ -3,6 +3,6 @@
 
 . ../../env
 
-tanzu cluster create acme -f vsphere-tkc.yaml
+tanzu cluster create dev -f vsphere-tkc.yaml
 
-tanzu cluster kubeconfig get acme --admin
+tanzu cluster kubeconfig get dev --admin
