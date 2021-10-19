@@ -1,8 +1,9 @@
 #!/bin/bash
+#bdereims@gmail.com
 
 . ./env
 
-DB=web.txt
+DB=nginx.txt
 
 cp /dev/null $DB 
 

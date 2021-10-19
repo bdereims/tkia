@@ -11,7 +11,7 @@
 #kubectl create namespace ${NAMESPACE}
 
 #YAMLS="secret.yaml back-end.yaml front-end.yaml"
-YAMLS="secret.yaml front-end.yaml"
+YAMLS="secret.yaml front-end.yaml netpolicy.yaml"
 
 for FILE in ${YAMLS} ; do
 	echo "--- Applying ${FILE}"
