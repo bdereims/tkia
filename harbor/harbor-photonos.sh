@@ -83,7 +83,11 @@ cp ca.crt /etc/docker/certs.d/${HOSTNAME}.${DOMAIN}/
 ### Modify Docker daemon config because 172.17/16 often already allocated 
 cat > /etc/docker/daemon.json <<-EOF
 {
-  "bip": "172.31.0.1/16"
+  "bip": "172.31.0.1/16",
+  "default-address-pools":
+  [
+    {"base":"172.30.0.0/16","size":24}
+  ]
 }
 EOF
 
