@@ -64,6 +64,9 @@ Brice
 
 ## Hands on Lab
 HOL are available [here](https://labs.hol.vmware.com)
+NEW
+- HOL-2235-01-MAP - [VMware Tanzu for Developers](https://labs.hol.vmware.com/HOL/catalogs/lab/10426)
+---
 - HOL-2132-01-MAP - VMware Tanzu Mission Control
 - HOL-2137-91-NET - VMware NSX Advanced Load Balancer (Avi Networks) Lighting Lab
 - HOL-2033-01-CNA - Managing and Extending Kubernetes - Getting Started
