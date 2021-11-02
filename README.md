@@ -64,7 +64,9 @@ Brice
 
 ## Hands on Lab
 HOL are available [here](https://labs.hol.vmware.com)
+
 NEW
+
 - HOL-2235-01-MAP - [VMware Tanzu for Developers](https://labs.hol.vmware.com/HOL/catalogs/lab/10426)
 ---
 - HOL-2132-01-MAP - VMware Tanzu Mission Control
