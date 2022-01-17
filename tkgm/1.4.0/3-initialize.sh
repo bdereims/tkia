@@ -3,9 +3,9 @@
 
 . ../../env
 
-sysctl net/netfilter/nf_conntrack_max=131072
+sudo sysctl net/netfilter/nf_conntrack_max=131072
 
-rm -fr ~/.tanzu ~/.kube-tkg
+rm -fr ~/.tanzu ~/.kube-tkg ~/.config ~/.kube
 docker ps -aq | xargs docker kill 
 docker ps -aq | xargs docker rm
 mkdir -p ~/.tanzu/tkg
@@ -23,8 +23,7 @@ IP=$( ip a show dev ens192 | grep inet | sed -e "s/^.*inet //" -e "s/\/.*$//" )
 
 ### If you prefer to setup trough ui
 #tanzu management-cluster create --ui --bind ${IP}:8080 --browser none -v 9
-#tanzu management-cluster create --file mgnt-tkgm.yaml -v 9
-tanzu management-cluster create --file ~/q8kbyy8tn6.yaml -v 9
+tanzu management-cluster create --file mgnt-tkgm.yaml -v 9
 
 ### for user auth
 #export TANZU_CLI_PINNIPED_AUTH_LOGIN_SKIP_BROWSER=true

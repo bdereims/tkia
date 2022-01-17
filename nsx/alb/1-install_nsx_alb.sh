@@ -44,6 +44,4 @@ install_nsx_alb_controller() {
 }
 
 
-#install_nsx_alb_controller 1 
-#install_nsx_alb_controller 2
-install_nsx_alb_controller 3 
+install_nsx_alb_controller 1 

@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: octant-service
+  labels:
+    run: octant
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    run: octant
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: octant-deployment
+spec:
+  selector:
+    matchLabels:
+      run: octant
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run : octant
+    spec:
+      containers:
+      - name: octant
+        image: harbor.vmc-tanzu.io/xpday/octant
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: config
+          mountPath: /.kube
+        ports:
+        - containerPort: 80
+      volumes:
+        - name: config
+          configMap:
+            name: octant-config
