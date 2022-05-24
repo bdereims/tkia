@@ -43,6 +43,7 @@ Brice
 - [Devops](https://tanzu.vmware.com/services-marketplace/devops-tooling)
 - [Identity and Security](https://tanzu.vmware.com/services-marketplace/identity-and-security)
 - [Monitoring, Metrics and Logging](https://tanzu.vmware.com/services-marketplace/monitoring-metrics-and-logging) 
+- [nvidia AI Enterprise Launchpad](https://docs.nvidia.com/launchpad/infrastructure/tanzu-itadmin-overview.html)
 
 ## BLOGs / VLOGs
 - [My Cloud Garage Blog](https://blog.cloud-garage.net)
