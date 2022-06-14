@@ -1,0 +1,106 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pv-claim
+  labels:
+    app: mariadb
+  namespace: ${NAMESPACE}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-initdb-scripts
+  namespace: ${NAMESPACE}
+data:
+  init.sql: |
+    select 1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb-service
+  namespace: ${NAMESPACE}
+spec:
+  type: LoadBalancer
+  ports:
+  - name: mariadb
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    app: mariadb
+  
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  labels:
+    app: mariadb
+  namespace: ${NAMESPACE}
+spec:
+  selector:
+    matchLabels:
+      app: mariadb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - image: mariadb:10.4.6
+        name: mariadb
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: password
+        livenessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - "mysqladmin -u root -p'VMware1!' ping"
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          timeoutSeconds: 5 
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - "mysql -u root -p'VMware1!' -e 'show databases'"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5 
+          successThreshold: 1
+          failureThreshold: 3
+        ports:
+        - containerPort: 3306
+          name: default
+        volumeMounts:
+        - name: mariadb-persistent-storage
+          mountPath: /var/lib/mysql
+        - name: mariadb-initdb-scripts
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+      - name: mariadb-persistent-storage
+        persistentVolumeClaim:
+          claimName: mariadb-pv-claim
+      - name: mariadb-initdb-scripts
+        configMap:
+          name: mariadb-initdb-scripts

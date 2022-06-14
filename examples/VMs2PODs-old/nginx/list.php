@@ -1,7 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-<meta http-equiv="refresh" content="5">
 <style>
 table, th, td {
   border: 1px solid black;
@@ -14,21 +13,19 @@ th, td {
 </style>
 </head>
 <body>
-php-fpm on: <p style="font:italic small-caps bold 18px/24px Garamond, Georgia, Times, Serif;color:green;">
-<?php
-
-echo gethostname();
-?>	
-</p><br>
 
 <?php
-$hostname = getenv("MARIADB_HOST");
-$username = getenv("MARIADB_USER");
-$password = getenv("MARIADB_PASSWORD");
-$db = getenv("MARIADB_DATABASE");
-echo "<p>BD -=> ".$username."@".$hostname.":".$db."</p>";
+
+$hostname = "192.168.72.9";
+$username = "root";
+$password = "VMware1!";
+$db = "nginx";
 
 $dbconnect=mysqli_connect($hostname,$username,$password,$db);
+
+if ($dbconnect->connect_error) {
+  die("Database connection failed: " . $dbconnect->connect_error);
+}
 
 $result = $dbconnect->query("select * from web");
 

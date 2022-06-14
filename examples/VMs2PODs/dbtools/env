@@ -1,0 +1,4 @@
+export TARGET=localhost
+export USERNAME=root
+export PASSWORD='VMware1!'
+export DATABASE=nginx

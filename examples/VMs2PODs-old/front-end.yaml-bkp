@@ -1,9 +1,7 @@
----
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: php-fpm 
-  namespace: ${NAMESPACE}
 automountServiceAccountToken: true
 
 ---
@@ -17,7 +15,7 @@ metadata:
 spec:
   strategy:
     type: Recreate
-  replicas: 1 
+  replicas: 1
   selector:
     matchLabels:
       app: php-fpm
@@ -25,38 +23,28 @@ spec:
     metadata:
       labels:
         app: php-fpm
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/connect-service-protocol: "tcp"
+        consul.hashicorp.com/connect-service-port: "9000"
     spec:
+      serviceAccountName: php-fpm
       containers:
       - name: php-fpm
-        image: ${LIBRARY}/acme-php-fpm
+        image: ${LIBRARY}/acme-php-fpm:latest
         resources:
           limits:
-            cpu: 200m 
-            memory: 200Mi
+            cpu: 8m 
+            memory: 10Mi
           requests:
-            cpu: 100m
-            memory: 50Mi
+            cpu: 6m
+            memory: 8Mi
         env:
-          - name: MARIADB_PASSWORD
+          - name: MARIADB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: mysecret
                 key: password
-          - name: MARIADB_USER
-            valueFrom:
-              secretKeyRef:
-                name: mysecret
-                key: user
-          - name: MARIADB_HOST
-            valueFrom:
-              secretKeyRef:
-                name: mysecret
-                key: host 
-          - name: MARIADB_DATABASE
-            valueFrom:
-              secretKeyRef:
-                name: mysecret
-                key: database 
         ports:
         - containerPort: 9000
 
@@ -81,7 +69,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: nginx
-  namespace: ${NAMESPACE}
 automountServiceAccountToken: true
 
 ---
@@ -103,33 +90,27 @@ spec:
     metadata:
       labels:
         app: nginx
+      annotations:
+        consul.hashicorp.com/connect-inject: "true"
+        consul.hashicorp.com/connect-service-upstreams: "php-fpm:9000"
     spec:
+      serviceAccountName: nginx
       containers:
       - name: nginx
         image: ${LIBRARY}/acme-nginx:latest 
         resources:
           limits:
-            cpu: 200m 
-            memory: 200Mi
+            cpu: 6m 
+            memory: 8Mi
           requests:
-            cpu: 100m 
-            memory: 50Mi
+            cpu: 4m 
+            memory: 5Mi
         env:
-          - name: MARIADB_PASSWORD
+          - name: MARIADB_ROOT_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: mysecret
                 key: password
-          - name: MARIADB_USER
-            valueFrom:
-              secretKeyRef:
-                name: mysecret
-                key: user
-          - name: MARIADB_HOST
-            valueFrom:
-              secretKeyRef:
-                name: mysecret
-                key: host 
         ports:
         - containerPort: 80
 
@@ -140,7 +121,7 @@ metadata:
   name: nginx-service
   namespace: ${NAMESPACE} 
 spec:
-  type: LoadBalancer 
+  type: ClusterIP
   ports:
   - name: nginx 
     port: 80 
@@ -150,19 +131,36 @@ spec:
     app: nginx 
     
 ---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+  namespace: ${NAMESPACE} 
+  #annotations:
+  #  ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /${NAMESPACE}/*
+        backend:
+          serviceName: nginx-service
+          servicePort: 80
+
+---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: nginx-deployment
   namespace: ${NAMESPACE} 
 spec:
-  maxReplicas: 3 
+  maxReplicas: 10
   minReplicas: 1 
   scaleTargetRef:
-    apiVersion: apps/v1 
+    apiVersion: extensions/v1beta1
     kind: Deployment
     name: nginx-deployment
-  targetCPUUtilizationPercentage: 1 
+  targetCPUUtilizationPercentage: 50
 
 ---
 apiVersion: autoscaling/v1
@@ -171,10 +169,10 @@ metadata:
   name: php-fpm-deployment
   namespace: ${NAMESPACE} 
 spec:
-  maxReplicas: 4 
+  maxReplicas: 10
   minReplicas: 1
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: extensions/v1beta1
     kind: Deployment
     name: php-fpm-deployment
-  targetCPUUtilizationPercentage: 2 
+  targetCPUUtilizationPercentage: 50

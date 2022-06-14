@@ -1,0 +1,26 @@
+apiVersion: autoscaling/v1 
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx-deployment
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx-deployment
+  targetCPUUtilizationPercentage: 50
+
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php-fpm-deployment
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1 
+    kind: Deployment
+    name: php-fpm-deployment
+  targetCPUUtilizationPercentage: 50

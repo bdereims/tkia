@@ -1,19 +1,25 @@
+### VMs2PODs App settings
+
 encode() {
 	printf "${1}" | base64
 }
 
-export FQDN=harbor.cpod-devready.az-fkd.cloud-garage.net
-#export LIBRARY=${FQDN}/acme
-export LIBRARY=${FQDN}/library
-export NAMESPACE="acme"
+export FQDN=registry.cloud-garage.net
+export LIBRARY=${FQDN}/${USER}
+export NAMESPACE="${USER}"
+
 ### PASSWORD='VMware1!'
 export PASSWORD="Vk13YXJlMSE="
+
 DB_USER=$(encode root)
 export DB_USER
+
 DB_PASSWORD=$(encode 'VMware1!')
 export DB_PASSWORD
-#DB_HOST=$(encode 192.168.1.165)
-DB_HOST=$(encode backend-mariadb.cpod-devready.az-fkd.cloud-garage.net)
+
+DB_HOST=$(encode backend-mariadb.vmc-tanzu.io)
+#DB_HOST=$(encode database-1.c4xqp8mjwqme.us-west-2.rds.amazonaws.com)
 export DB_HOST
+
 DB_DATABASE=$(encode nginx)
 export DB_DATABASE
